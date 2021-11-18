@@ -1,0 +1,18 @@
+.toplevel_page_maintenance-mode .postbox#submitdiv .postbox-header,
+.toplevel_page_maintenance-mode .postbox#acf-group_61961e88717f5 .postbox-header  {
+    display: none;
+}
+.toplevel_page_maintenance-mode .postbox#submitdiv,
+.toplevel_page_maintenance-mode .postbox#submitdiv .inside #major-publishing-actions,
+.toplevel_page_maintenance-mode .postbox#acf-group_61961e88717f5 {
+    background: #f0f0f1;
+    box-shadow: none;
+    border: none;
+}
+.toplevel_page_maintenance-mode #poststuff {
+    min-width: unset;
+    width: 25%;
+}
+.toplevel_page_maintenance-mode #poststuff .postbox#submitdiv .inside {
+    margin-top: 15px;
+}

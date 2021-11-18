@@ -81,18 +81,13 @@ class Smashing_Updater {
 	}
 
 	public function modify_transient( $transient ) {
-
 		if( property_exists( $transient, 'checked') ) { // Check if transient has a checked property
 
 			if( $checked = $transient->checked ) { // Did Wordpress check for updates?
 
 				$this->get_repository_info(); // Get the repo info
 
-                if(isset($this->github_response['tag_name'])){
-                    $p_version = $this->github_response['tag_name'];
-                }
-
-				$out_of_date = version_compare( $p_version, $checked[ $this->basename ], 'gt' ); // Check if we're out of date
+				$out_of_date = version_compare( $this->github_response['tag_name'], $checked[ $this->basename ], 'gt' ); // Check if we're out of date
 
 				if( $out_of_date ) {
 
@@ -104,14 +99,13 @@ class Smashing_Updater {
 						'url' => $this->plugin["PluginURI"],
 						'slug' => $slug,
 						'package' => $new_files,
-						'new_version' => $p_version
+						'new_version' => $this->github_response['tag_name']
 					);
 
 					$transient->response[$this->basename] = (object) $plugin; // Return it in response
 				}
 			}
 		}
-
 		return $transient; // Return filtered transient
 	}
 
@@ -127,7 +121,7 @@ class Smashing_Updater {
 				$plugin = array(
 					'name'				=> $this->plugin["Name"],
 					'slug'				=> $this->basename,
-					'version'			=> $p_version,
+					'version'			=> $this->github_response['tag_name'],
 					'author'			=> $this->plugin["AuthorName"],
 					'author_profile'	=> $this->plugin["AuthorURI"],
 					'last_updated'		=> $this->github_response['published_at'],
