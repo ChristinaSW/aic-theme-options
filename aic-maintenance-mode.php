@@ -4,7 +4,7 @@
  * Plugin Name: AIC Maintenance Mode
  * Plugin URI: https://anioncreative.com
  * Description: Displays a maintenance mode page for anyone who's not logged in.
- * Version: 1.2.3
+ * Version: 1.2.4
  * Author: An Ion Creative
  * Author URI: https://anioncreative.com
  *
