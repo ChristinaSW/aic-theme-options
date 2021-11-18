@@ -4,12 +4,22 @@
  * Plugin Name: AIC Maintenance Mode
  * Plugin URI: https://anioncreative.com
  * Description: Displays a maintenance mode page for anyone who's not logged in.
- * Version: 1.0
+ * Version: 1.0.0
  * Author: An Ion Creative
  * Author URI: https://anioncreative.com
  *
  * @package aic-maintenance-mode
 */
+
+if( ! class_exists( 'Smashing_Updater' ) ){
+	include_once( plugin_dir_path( __FILE__ ) . 'updater.php' );
+}
+
+$updater = new Smashing_Updater( __FILE__ );
+$updater->set_username( 'ChristinaSW' );
+$updater->set_repository( 'aic-maintenance-mode' );
+$updater->authorize( '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' ); // Your auth code goes here for private repos
+$updater->initialize();
 
 if ( in_array( 'advanced-custom-fields-pro/acf.php', apply_filters( 'active_plugins', get_option( 'active_plugins' ) ) ) ) {
     // do stuff only if ACF is installed and active
