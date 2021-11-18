@@ -88,7 +88,11 @@ class Smashing_Updater {
 
 				$this->get_repository_info(); // Get the repo info
 
-				$out_of_date = version_compare( $this->github_response['tag_name'], $checked[ $this->basename ], 'gt' ); // Check if we're out of date
+                if(isset($this->github_response['tag_name'])){
+                    $p_version = $this->github_response['tag_name'];
+                }
+
+				$out_of_date = version_compare( $p_version, $checked[ $this->basename ], 'gt' ); // Check if we're out of date
 
 				if( $out_of_date ) {
 
@@ -100,7 +104,7 @@ class Smashing_Updater {
 						'url' => $this->plugin["PluginURI"],
 						'slug' => $slug,
 						'package' => $new_files,
-						'new_version' => $this->github_response['tag_name']
+						'new_version' => $p_version
 					);
 
 					$transient->response[$this->basename] = (object) $plugin; // Return it in response
@@ -123,7 +127,7 @@ class Smashing_Updater {
 				$plugin = array(
 					'name'				=> $this->plugin["Name"],
 					'slug'				=> $this->basename,
-					'version'			=> $this->github_response['tag_name'],
+					'version'			=> $p_version,
 					'author'			=> $this->plugin["AuthorName"],
 					'author_profile'	=> $this->plugin["AuthorURI"],
 					'last_updated'		=> $this->github_response['published_at'],
