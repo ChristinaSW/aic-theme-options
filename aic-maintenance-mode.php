@@ -54,36 +54,13 @@
     function my_acf_settings_show_admin( $show_admin ) {
         return true;
     }
-
-// Add save point
-    // add_filter('acf/settings/save_json', 'my_acf_json_save_point');
-    function my_acf_json_save_point( $path ) {
-        
-        // update path
-        $path = plugin_dir_path(__FILE__) . 'aic-maintenance-mode-fields';
-
-        return $path;        
-    }
-
-// Add load point
-    // add_filter('acf/settings/load_json', 'my_acf_json_load_point');
-    function my_acf_json_load_point( $paths ) {
-        
-        // remove original path (optional)
-        // unset($paths[0]);
-        
-        // append path
-        $paths[] = plugin_dir_path(__FILE__) . 'includes/aic-maintenance-mode-fields';
-
-        return $paths;
-    }
     
 // Create the option page in the admin
 
 	if( function_exists('acf_add_options_page') ) {
 			
 		acf_add_options_page( array(
-				'page_title' 	=> 'Enable Maintenance Mode?',
+				'page_title' 	=> 'AIC Maintence Mode',
 				'menu_title'	=> 'Maintenance Mode',
 				'menu_slug' 	=> 'maintenance-mode',
 				'position' 		=> '6',

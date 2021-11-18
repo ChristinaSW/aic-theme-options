@@ -9,10 +9,6 @@
     box-shadow: none;
     border: none;
 }
-.toplevel_page_maintenance-mode #poststuff {
-    min-width: unset;
-    width: 25%;
-}
 .toplevel_page_maintenance-mode #poststuff .postbox#submitdiv .inside {
     margin-top: 15px;
 }
