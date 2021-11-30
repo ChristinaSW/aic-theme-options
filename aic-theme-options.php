@@ -19,7 +19,7 @@
 
     $updater = new Smashing_Updater( __FILE__ );
     $updater->set_username( 'ChristinaSW' );
-    $updater->set_repository( 'aic-maintenance-mode' );
+    $updater->set_repository( 'aic-theme-options' );
     $updater->initialize();
 
 // Check if ACF plugin is already installed and use it instead
@@ -45,7 +45,7 @@
     include_once( MY_ACF_PATH . 'acf.php' );
 
 // Add our custom fields
-    include_once( plugin_dir_path(__FILE__) . '/includes/maintenance-fields.php' );
+    include_once( plugin_dir_path(__FILE__) . '/includes/aic-custom-fields.php' );
     
 // Create the option page in the admin
 
