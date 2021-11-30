@@ -1,7 +1,7 @@
 <?php
 
 /*
- * Plugin Name: AIC Maintenance Mode
+ * Plugin Name: AIC Theme Options
  * Plugin URI: https://anioncreative.com
  * Description: Displays a maintenance mode page for anyone who's not logged in.
  * Version: 1.2.4
@@ -52,9 +52,9 @@
 	if( function_exists('acf_add_options_page') ) {
 			
 		acf_add_options_page( array(
-				'page_title' 	=> 'AIC Maintenance Mode',
-				'menu_title'	=> 'Maintenance Mode',
-				'menu_slug' 	=> 'maintenance-mode',
+				'page_title' 	=> 'Theme Options',
+				'menu_title'	=> 'Theme Options',
+				'menu_slug' 	=> 'theme-options',
 				'position' 		=> '6',
                 'autoload'      => TRUE,
                 'capability'    => 'edit_theme_options',
