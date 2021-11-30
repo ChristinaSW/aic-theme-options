@@ -72,6 +72,8 @@
             'show_in_rest' => 0,
         ));
 
+// Theme Color Fields
+
         acf_add_local_field_group(array(
             'key' => 'group_61896edfc50a8',
             'title' => 'Theme Options',

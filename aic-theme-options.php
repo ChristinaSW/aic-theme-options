@@ -22,6 +22,8 @@
     $updater->set_repository( 'aic-theme-options' );
     $updater->initialize();
 
+    
+
 // Check if ACF plugin is already installed and use it instead
 
     if ( in_array( 'advanced-custom-fields-pro/acf.php', apply_filters( 'active_plugins', get_option( 'active_plugins' ) ) ) ) {
@@ -66,7 +68,7 @@
 		
 	}
 
-// Function to run when switched on
+// Function to run when maintenance mode is switched on
     function aic_maintenance_mode(){
         if(!current_user_can('edit_themes') || !is_user_logged_in()){
            
