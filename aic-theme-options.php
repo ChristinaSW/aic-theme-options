@@ -3,12 +3,12 @@
 /*
  * Plugin Name: AIC Theme Options
  * Plugin URI: https://anioncreative.com
- * Description: Displays a maintenance mode page for anyone who's not logged in.
+ * Description: Adds user options to AIC theme.
  * Version: 2.2.4
  * Author: An Ion Creative
  * Author URI: https://anioncreative.com
  *
- * @package aic-maintenance-mode
+ * @package aic-theme-options
 */
 
 // Add updater so we can update plugin from github
@@ -60,7 +60,7 @@
 				'position' 		=> '6',
                 'autoload'      => TRUE,
                 'capability'    => 'edit_theme_options',
-                'icon_url'      => 'dashicons-hammer',
+                'icon_url'      => 'dashicons-art',
 				'update_button' => __('Save Settings', 'acf'),
 				'updated_message' => __("Settings Saved", 'acf'),
 			)
