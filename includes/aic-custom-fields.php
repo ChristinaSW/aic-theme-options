@@ -1,6 +1,8 @@
 <?php
 
-if( function_exists('acf_add_local_field_group') ):
+add_action( 'acf/init', 'aic_theme_options' );
+
+function aic_theme_options(){
 
     acf_add_local_field_group(array(
         'key' => 'group_61961e88717f5',
@@ -157,8 +159,7 @@ if( function_exists('acf_add_local_field_group') ):
         'active' => true,
         'description' => '',
         'show_in_rest' => 0,
-));
-
-endif;
+    ));
+}
 
 ?>

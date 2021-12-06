@@ -4,7 +4,7 @@
  * Plugin Name: AIC Theme Options
  * Plugin URI: https://anioncreative.com
  * Description: Adds user options to AIC theme.
- * Version: 2.2.4
+ * Version: 3.2.4
  * Author: An Ion Creative
  * Author URI: https://anioncreative.com
  *
@@ -14,7 +14,7 @@
 // Add updater so we can update plugin from github
 
     if( ! class_exists( 'Smashing_Updater' ) ){
-        include_once( plugin_dir_path( __FILE__ ) . 'includes/updater.php' );
+        include_once( plugin_dir_path( __FILE__ ) . 'lib/updater.php' );
     }
 
     $updater = new Smashing_Updater( __FILE__ );
@@ -33,8 +33,8 @@
         define( 'MY_ACF_URL', plugin_dir_path(__DIR__) . 'advanced-custom-fields-pro/' );
     }else{
         // Define path and URL to the ACF plugin.
-        define( 'MY_ACF_PATH', plugin_dir_path(__FILE__) . 'lib/acf/' );
-        define( 'MY_ACF_URL', plugin_dir_path(__FILE__) . 'lib/acf/' );
+        define( 'MY_ACF_PATH', plugin_dir_path(__FILE__) . 'includes/acf/' );
+        define( 'MY_ACF_URL', plugin_dir_path(__FILE__) . 'includes/acf/' );
 
         // Hide ACF admin menu if it is not natively installed
         add_filter('acf/settings/show_admin', 'my_acf_settings_show_admin');
@@ -47,16 +47,16 @@
     include_once( MY_ACF_PATH . 'acf.php' );
 
 // Add our custom fields
-    include_once( plugin_dir_path(__FILE__) . '/includes/aic-custom-fields.php' );
+    include_once( plugin_dir_path(__FILE__) . 'lib/aic-custom-fields.php' );
     
 // Create the option page in the admin
-
-	if( function_exists('acf_add_options_page') ) {
+    add_action( 'acf/init', 'aic_option_page' );
+	function aic_option_page(){
 			
 		acf_add_options_page( array(
 				'page_title' 	=> 'Theme Options',
 				'menu_title'	=> 'Theme Options',
-				'menu_slug' 	=> 'theme-options',
+				'menu_slug' 	=> 'aic-theme-options',
 				'position' 		=> '6',
                 'autoload'      => TRUE,
                 'capability'    => 'edit_theme_options',
@@ -79,11 +79,15 @@
         }
     }
     
-    $status = get_field( 'enable_maintenance_mode', 'option');
+    add_action( 'acf/init', 'aic_status_check' );
+    function aic_status_check(){
+        $status = get_field( 'enable_maintenance_mode', 'option');
 
-    if( $status != FALSE ){
-        add_action('get_header', 'aic_maintenance_mode');
+        if( $status != FALSE ){
+            add_action('get_header', 'aic_maintenance_mode');
+        }
     }
+    
 
 // Add admin styling
 
@@ -91,4 +95,105 @@
     function aic_emm_admin_styles(){
         wp_enqueue_style( 'admin-styles', plugin_dir_url(__FILE__) . '/assets/aic-mm-admin-styles.css');
     }
+
+// Add front end styling
+    add_action( 'wp_enqueue_scripts', 'aic_theme_options_styles' );
+    function aic_theme_options_styles(){
+        wp_enqueue_style('aic-theme-option-styles', plugin_dir_url( __FILE__ ) . 'assets/aic-theme-options.css' );
+        wp_enqueue_style('aic-theme-option-styles', plugin_dir_url( __FILE__ ) . 'assets/dynamic-aic-theme-options.css' );
+    }
+   
+
+// Add dynamic styles from ACF options
+
+    add_action('parse_request', 'parse_dynamic_css_request');
+    function parse_dynamic_css_request($wp) {
+        $ss_dir = plugin_dir_path( __FILE__ ); // Shorten code, save 1 call
+        ob_start(); // Capture all output (output buffering)
+        require($ss_dir . 'assets/dynamic-aic-theme-options.css.php'); // Generate CSS
+        $css = ob_get_clean(); // Get generated CSS (output buffering)
+        file_put_contents($ss_dir . 'assets/dynamic-aic-theme-options.css', $css, LOCK_EX); // Save it
+    }
+
+    
+// Theme Colors
+
+	// Custom colors for editor
+
+function aic_editor_colors(){
+    $get_colors = get_field( 'theme_colors', 'option' );
+    $color_array = array();
+
+    foreach( $get_colors as $color ){
+        $custom_colors = array(
+            'name' => __( $color['color_name'], 'genesis-sample' ),
+            'slug' => strtolower( $color['color_name'] ),
+            'color' => $color['color_hex']
+        );
+        $color_array[] = $custom_colors;
+    }
+
+    add_theme_support( 'editor-color-palette', $color_array );
+
+}
+    add_action( 'acf/init', 'aic_editor_colors' );
+    
+
+    // Add theme colors to ACF WYSIWYG
+
+    function aic_theme_wysiwyg_colors($init) {
+
+        $custom_colors = '';
+        $get_colors = get_field( 'theme_colors', 'option');
+
+        foreach( $get_colors as $color ){
+            $get_hex = str_replace('#', '', $color['color_hex']);
+            $c_name = $color['color_name'];
+            $custom_colors .= '"'.$get_hex.'", "'.$c_name.'",';
+        }
+
+        $custom_colors .= '
+            "000000", "Black",
+            "FFFFFF", "White",
+            "808080", "Gray"
+        ';
+
+        // build colour grid default+custom colors
+        $init['textcolor_map'] = '['.$custom_colors.']';
+
+        // change the number of rows in the grid if the number of colors changes
+        // 8 swatches per row
+        $init['textcolor_rows'] = 1;
+
+        return $init;
+    }
+    add_filter('tiny_mce_before_init', 'aic_theme_wysiwyg_colors');
+
+    // Add theme colors to ACF color picker
+
+    function aic_colorpicker_colors() { 
+        
+        $get_colors = get_field( 'theme_colors', 'option');
+
+        $colors = '';
+
+        foreach( $get_colors as $color ){
+            $colors .= "'".$color['color_hex']."', ";
+        }
+        ?>
+        <script type="text/javascript">
+            (function($){
+        
+                acf.add_filter('color_picker_args', function( args, $field ){
+        
+                    args.palettes = [<?php echo $colors ?> '#ffffff', '#000000']
+                    return args;
+                });
+        
+            })(jQuery);
+        </script>
+        <?php
+    }
+    add_action('acf/input/admin_footer', 'aic_colorpicker_colors');
+
 ?>
