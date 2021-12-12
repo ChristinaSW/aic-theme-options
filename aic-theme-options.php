@@ -120,80 +120,82 @@
 
 	// Custom colors for editor
 
-function aic_editor_colors(){
-    $get_colors = get_field( 'theme_colors', 'option' );
-    $color_array = array();
+        function aic_editor_colors(){
+            $get_colors = get_field( 'theme_colors', 'option' );
+            $color_array = array();
 
-    foreach( $get_colors as $color ){
-        $custom_colors = array(
-            'name' => __( $color['color_name'], 'genesis-sample' ),
-            'slug' => strtolower( $color['color_name'] ),
-            'color' => $color['color_hex']
-        );
-        $color_array[] = $custom_colors;
-    }
+            foreach( $get_colors as $color ){
+                $custom_colors = array(
+                    'name' => __( $color['color_name'], 'genesis-sample' ),
+                    'slug' => strtolower( $color['color_name'] ),
+                    'color' => $color['color_hex']
+                );
+                $color_array[] = $custom_colors;
+            }
 
-    add_theme_support( 'editor-color-palette', $color_array );
+            add_theme_support( 'editor-color-palette', $color_array );
 
-}
-    add_action( 'acf/init', 'aic_editor_colors' );
+        }
+        add_action( 'acf/init', 'aic_editor_colors' );
     
 
     // Add theme colors to ACF WYSIWYG
 
-    function aic_theme_wysiwyg_colors($init) {
+        function aic_theme_wysiwyg_colors($init) {
 
-        $custom_colors = '';
-        $get_colors = get_field( 'theme_colors', 'option');
+            $custom_colors = '';
+            $get_colors = get_field( 'theme_colors', 'option');
 
-        foreach( $get_colors as $color ){
-            $get_hex = str_replace('#', '', $color['color_hex']);
-            $c_name = $color['color_name'];
-            $custom_colors .= '"'.$get_hex.'", "'.$c_name.'",';
+            foreach( $get_colors as $color ){
+                $get_hex = str_replace('#', '', $color['color_hex']);
+                $c_name = $color['color_name'];
+                $custom_colors .= '"'.$get_hex.'", "'.$c_name.'",';
+            }
+
+            $custom_colors .= '
+                "000000", "Black",
+                "FFFFFF", "White",
+                "808080", "Gray"
+            ';
+
+            // build colour grid default+custom colors
+            $init['textcolor_map'] = '['.$custom_colors.']';
+
+            // change the number of rows in the grid if the number of colors changes
+            // 8 swatches per row
+            $init['textcolor_rows'] = 1;
+
+            return $init;
         }
-
-        $custom_colors .= '
-            "000000", "Black",
-            "FFFFFF", "White",
-            "808080", "Gray"
-        ';
-
-        // build colour grid default+custom colors
-        $init['textcolor_map'] = '['.$custom_colors.']';
-
-        // change the number of rows in the grid if the number of colors changes
-        // 8 swatches per row
-        $init['textcolor_rows'] = 1;
-
-        return $init;
-    }
-    add_filter('tiny_mce_before_init', 'aic_theme_wysiwyg_colors');
+        add_filter('tiny_mce_before_init', 'aic_theme_wysiwyg_colors');
 
     // Add theme colors to ACF color picker
 
-    function aic_colorpicker_colors() { 
+        function aic_colorpicker_colors() { 
+            $get_colors = get_field( 'theme_colors', 'option');
+
+            if($get_colors != '' ){
+                $colors = '';
+    
+                foreach( $get_colors as $color ){
+                    $colors .= "'".$color['color_hex']."', ";
+                }
+                ?>
+                <script type="text/javascript">
+                    (function($){
+                
+                        acf.add_filter('color_picker_args', function( args, $field ){
+                
+                            args.palettes = [<?php echo $colors ?> '#ffffff', '#000000']
+                            return args;
+                        });
+                
+                    })(jQuery);
+                </script>
+                <?php
         
-        $get_colors = get_field( 'theme_colors', 'option');
-
-        $colors = '';
-
-        foreach( $get_colors as $color ){
-            $colors .= "'".$color['color_hex']."', ";
+            }
         }
-        ?>
-        <script type="text/javascript">
-            (function($){
-        
-                acf.add_filter('color_picker_args', function( args, $field ){
-        
-                    args.palettes = [<?php echo $colors ?> '#ffffff', '#000000']
-                    return args;
-                });
-        
-            })(jQuery);
-        </script>
-        <?php
-    }
-    add_action('acf/input/admin_footer', 'aic_colorpicker_colors');
+        add_action('acf/input/admin_footer', 'aic_colorpicker_colors');
 
 ?>
