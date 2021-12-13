@@ -1,0 +1,59 @@
+body {
+    font: 20px Helvetica, sans-serif;
+    color: #333;
+}
+.container {
+  background-image: url(https://maintence.s3.us-east-2.amazonaws.com/under-maintenance.jpg);
+  background-repeat: no-repeat;
+  width: 95%;
+  height: 700px;
+  margin: 0 auto;
+  position: relative;
+  background-position: center right;
+}
+h1 {
+  font-size: 50px;
+}
+img {
+  width: 100%;
+}
+.logo {
+  position: absolute;
+  display: inline-block;
+  bottom: 0px;
+}
+.logo a {
+  color: #333;
+}
+.logo p {
+  display: inline-block;
+  margin: 0 2% 0 0;
+  vertical-align: bottom;
+  font-style: italic;
+}
+.logo img {
+  width: 30%;
+  vertical-align: middle;
+}
+.main-logo {
+  width: 25%;
+  /* position: absolute;
+  top: 40px; */
+  margin: 40px 0 100px;
+}
+.content {
+  max-width: 750px;
+  width: 100%;
+}
+
+/* Mobile */
+
+@media all 
+and (max-width: 480px)
+and (orientation: portrait) {
+
+  .main-logo {
+    width: 50%;
+  }
+
+}
