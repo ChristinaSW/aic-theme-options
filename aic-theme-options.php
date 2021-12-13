@@ -52,7 +52,6 @@
 // Create the option page in the admin
     add_action( 'acf/init', 'aic_option_page' );
 	function aic_option_page(){
-			
 		acf_add_options_page( array(
 				'page_title' 	=> 'Theme Options',
 				'menu_title'	=> 'Theme Options',
@@ -88,12 +87,32 @@
         }
     }
     
+// Register JQuery
+    add_action( 'acf/input/admin_enqueue_scripts', 'aic_theme_options_java', 11 );
+    function aic_theme_options_java(){
+        wp_register_script( 
+            'acf-collapse-fields-admin-js',
+            esc_url( plugins_url( 'lib/acf-collapse-fields-admin.js', __FILE__ ) ),
+            array( 'jquery' ),
+        );
+
+    // Localize the script with new data
+        $translation_array = array(
+            'expandAll'			=> __( 'Expand All Elements', 'acf-collapse-fields' ),
+            'collapseAll'		=> __( 'Collapse All Elements', 'acf-collapse-fields' )
+        );
+        
+        wp_localize_script( 'acf-collapse-fields-admin-js', 'collapsetranslation', $translation_array );
+        wp_enqueue_script('acf-collapse-fields-admin-js');
+    }
 
 // Add admin styling
 
     add_action( 'admin_enqueue_scripts', 'aic_emm_admin_styles' );
     function aic_emm_admin_styles(){
-        wp_enqueue_style( 'admin-styles', plugin_dir_url(__FILE__) . '/assets/aic-mm-admin-styles.css');
+        wp_enqueue_style( 'admin-styles', plugin_dir_url(__FILE__) . '/assets/aic-theme-options-admin-styles.css');
+
+
     }
 
 // Add front end styling
@@ -102,7 +121,6 @@
         wp_enqueue_style('aic-theme-option-styles', plugin_dir_url( __FILE__ ) . 'assets/aic-theme-options.css' );
         wp_enqueue_style('aic-theme-option-styles', plugin_dir_url( __FILE__ ) . 'assets/dynamic-aic-theme-options.css' );
     }
-   
 
 // Add dynamic styles from ACF options
 
@@ -114,16 +132,14 @@
         $css = ob_get_clean(); // Get generated CSS (output buffering)
         file_put_contents($ss_dir . 'assets/dynamic-aic-theme-options.css', $css, LOCK_EX); // Save it
     }
-
     
 // Theme Colors
 
 	// Custom colors for editor
-
+        add_action( 'acf/init', 'aic_editor_colors' );
         function aic_editor_colors(){
             $get_colors = get_field( 'theme_colors', 'option' );
             $color_array = array();
-
             foreach( $get_colors as $color ){
                 $custom_colors = array(
                     'name' => __( $color['color_name'], 'genesis-sample' ),
@@ -132,12 +148,8 @@
                 );
                 $color_array[] = $custom_colors;
             }
-
             add_theme_support( 'editor-color-palette', $color_array );
-
         }
-        add_action( 'acf/init', 'aic_editor_colors' );
-    
 
     // Add theme colors to ACF WYSIWYG
 
@@ -172,11 +184,12 @@
     // Add theme colors to ACF color picker
 
         function aic_colorpicker_colors() { 
+            
             $get_colors = get_field( 'theme_colors', 'option');
 
             if($get_colors != '' ){
                 $colors = '';
-    
+
                 foreach( $get_colors as $color ){
                     $colors .= "'".$color['color_hex']."', ";
                 }
@@ -195,7 +208,8 @@
                 <?php
         
             }
+
         }
-        add_action('acf/input/admin_footer', 'aic_colorpicker_colors');
+    add_action('acf/input/admin_footer', 'aic_colorpicker_colors');
 
 ?>
