@@ -66,26 +66,6 @@
 		);
 		
 	}
-
-// Function to run when maintenance mode is switched on
-    function aic_maintenance_mode(){
-        if(!current_user_can('edit_themes') || !is_user_logged_in()){
-           
-            if ( file_exists( plugin_dir_path( __FILE__ ) . 'views/maintenance.php' ) ) {
-                require_once( plugin_dir_path( __FILE__ ) . 'views/maintenance.php' );
-            }
-            die();
-        }
-    }
-    
-    add_action( 'acf/init', 'aic_status_check' );
-    function aic_status_check(){
-        $status = get_field( 'enable_maintenance_mode', 'option');
-
-        if( $status != FALSE ){
-            add_action('get_header', 'aic_maintenance_mode');
-        }
-    }
     
 // Register JQuery
     add_action( 'acf/input/admin_enqueue_scripts', 'aic_theme_options_java', 11 );
@@ -121,6 +101,7 @@
         wp_enqueue_style('aic-theme-option-styles', plugin_dir_url( __FILE__ ) . 'assets/aic-theme-options.css' );
         wp_enqueue_style('aic-theme-option-styles', plugin_dir_url( __FILE__ ) . 'assets/dynamic-aic-theme-options.css' );
     }
+   
 
 // Add dynamic styles from ACF options
 
@@ -131,6 +112,26 @@
         require($ss_dir . 'assets/dynamic-aic-theme-options.css.php'); // Generate CSS
         $css = ob_get_clean(); // Get generated CSS (output buffering)
         file_put_contents($ss_dir . 'assets/dynamic-aic-theme-options.css', $css, LOCK_EX); // Save it
+    }
+
+// Function to run when maintenance mode is switched on
+    function aic_maintenance_mode(){
+        if(!current_user_can('edit_themes') || !is_user_logged_in()){
+           
+            if ( file_exists( plugin_dir_path( __FILE__ ) . 'views/maintenance.php' ) ) {
+                require_once( plugin_dir_path( __FILE__ ) . 'views/maintenance.php' );
+            }
+            die();
+        }
+    }
+    
+    add_action( 'acf/init', 'aic_status_check' );
+    function aic_status_check(){
+        $status = get_field( 'enable_maintenance_mode', 'option');
+
+        if( $status != FALSE ){
+            add_action('get_header', 'aic_maintenance_mode');
+        }
     }
     
 // Theme Colors
@@ -153,63 +154,63 @@
 
     // Add theme colors to ACF WYSIWYG
 
-        function aic_theme_wysiwyg_colors($init) {
+    function aic_theme_wysiwyg_colors($init) {
 
-            $custom_colors = '';
-            $get_colors = get_field( 'theme_colors', 'option');
+        $custom_colors = '';
+        $get_colors = get_field( 'theme_colors', 'option');
 
-            foreach( $get_colors as $color ){
-                $get_hex = str_replace('#', '', $color['color_hex']);
-                $c_name = $color['color_name'];
-                $custom_colors .= '"'.$get_hex.'", "'.$c_name.'",';
-            }
-
-            $custom_colors .= '
-                "000000", "Black",
-                "FFFFFF", "White",
-                "808080", "Gray"
-            ';
-
-            // build colour grid default+custom colors
-            $init['textcolor_map'] = '['.$custom_colors.']';
-
-            // change the number of rows in the grid if the number of colors changes
-            // 8 swatches per row
-            $init['textcolor_rows'] = 1;
-
-            return $init;
+        foreach( $get_colors as $color ){
+            $get_hex = str_replace('#', '', $color['color_hex']);
+            $c_name = $color['color_name'];
+            $custom_colors .= '"'.$get_hex.'", "'.$c_name.'",';
         }
-        add_filter('tiny_mce_before_init', 'aic_theme_wysiwyg_colors');
+
+        $custom_colors .= '
+            "000000", "Black",
+            "FFFFFF", "White",
+            "808080", "Gray"
+        ';
+
+        // build colour grid default+custom colors
+        $init['textcolor_map'] = '['.$custom_colors.']';
+
+        // change the number of rows in the grid if the number of colors changes
+        // 8 swatches per row
+        $init['textcolor_rows'] = 1;
+
+        return $init;
+    }
+    add_filter('tiny_mce_before_init', 'aic_theme_wysiwyg_colors');
 
     // Add theme colors to ACF color picker
 
-        function aic_colorpicker_colors() { 
-            
-            $get_colors = get_field( 'theme_colors', 'option');
-
-            if($get_colors != '' ){
-                $colors = '';
-
-                foreach( $get_colors as $color ){
-                    $colors .= "'".$color['color_hex']."', ";
-                }
-                ?>
-                <script type="text/javascript">
-                    (function($){
-                
-                        acf.add_filter('color_picker_args', function( args, $field ){
-                
-                            args.palettes = [<?php echo $colors ?> '#ffffff', '#000000']
-                            return args;
-                        });
-                
-                    })(jQuery);
-                </script>
-                <?php
+    function aic_colorpicker_colors() { 
         
-            }
+        $get_colors = get_field( 'theme_colors', 'option');
 
+        if($get_colors != '' ){
+            $colors = '';
+
+            foreach( $get_colors as $color ){
+                $colors .= "'".$color['color_hex']."', ";
+            }
+            ?>
+            <script type="text/javascript">
+                (function($){
+            
+                    acf.add_filter('color_picker_args', function( args, $field ){
+            
+                        args.palettes = [<?php echo $colors ?> '#ffffff', '#000000']
+                        return args;
+                    });
+            
+                })(jQuery);
+            </script>
+            <?php
+    
         }
+
+    }
     add_action('acf/input/admin_footer', 'aic_colorpicker_colors');
 
 ?>
