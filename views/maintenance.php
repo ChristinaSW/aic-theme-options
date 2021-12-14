@@ -1,7 +1,7 @@
 <?php
 
 $logo = get_field( 'logo', 'option' );
-$styles = plugins_url( 'assets/style.css', dirname( __FILE__ ) );
+$styles = plugins_url( 'assets/aic-theme-options.css', dirname( __FILE__ ) );
 
 ?>
 

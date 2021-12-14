@@ -4,7 +4,7 @@
  * Plugin Name: AIC Theme Options
  * Plugin URI: https://anioncreative.com
  * Description: Adds user options to AIC theme.
- * Version: 3.2.6
+ * Version: 3.2.7
  * Author: An Ion Creative
  * Author URI: https://anioncreative.com
  *
@@ -52,7 +52,6 @@
 // Create the option page in the admin
     add_action( 'acf/init', 'aic_option_page' );
 	function aic_option_page(){
-			
 		acf_add_options_page( array(
 				'page_title' 	=> 'Theme Options',
 				'menu_title'	=> 'Theme Options',
@@ -67,33 +66,33 @@
 		);
 		
 	}
-
-// Function to run when maintenance mode is switched on
-    function aic_maintenance_mode(){
-        if(!current_user_can('edit_themes') || !is_user_logged_in()){
-           
-            if ( file_exists( plugin_dir_path( __FILE__ ) . 'views/maintenance.php' ) ) {
-                require_once( plugin_dir_path( __FILE__ ) . 'views/maintenance.php' );
-            }
-            die();
-        }
-    }
     
-    add_action( 'acf/init', 'aic_status_check' );
-    function aic_status_check(){
-        $status = get_field( 'enable_maintenance_mode', 'option');
+// Register JQuery
+    add_action( 'acf/input/admin_enqueue_scripts', 'aic_theme_options_java', 11 );
+    function aic_theme_options_java(){
+        wp_register_script( 
+            'acf-collapse-fields-admin-js',
+            esc_url( plugins_url( 'lib/acf-collapse-fields-admin.js', __FILE__ ) ),
+            array( 'jquery' ),
+        );
 
-        if( $status != FALSE ){
-            add_action('get_header', 'aic_maintenance_mode');
-        }
+    // Localize the script with new data
+        $translation_array = array(
+            'expandAll'			=> __( 'Expand All Elements', 'acf-collapse-fields' ),
+            'collapseAll'		=> __( 'Collapse All Elements', 'acf-collapse-fields' )
+        );
+        
+        wp_localize_script( 'acf-collapse-fields-admin-js', 'collapsetranslation', $translation_array );
+        wp_enqueue_script('acf-collapse-fields-admin-js');
     }
-    
 
 // Add admin styling
 
     add_action( 'admin_enqueue_scripts', 'aic_emm_admin_styles' );
     function aic_emm_admin_styles(){
-        wp_enqueue_style( 'admin-styles', plugin_dir_url(__FILE__) . '/assets/aic-mm-admin-styles.css');
+        wp_enqueue_style( 'admin-styles', plugin_dir_url(__FILE__) . '/assets/aic-theme-options-admin-styles.css');
+
+
     }
 
 // Add front end styling
@@ -115,29 +114,43 @@
         file_put_contents($ss_dir . 'assets/dynamic-aic-theme-options.css', $css, LOCK_EX); // Save it
     }
 
+// Function to run when maintenance mode is switched on
+    function aic_maintenance_mode(){
+        if(!current_user_can('edit_themes') || !is_user_logged_in()){
+           
+            if ( file_exists( plugin_dir_path( __FILE__ ) . 'views/maintenance.php' ) ) {
+                require_once( plugin_dir_path( __FILE__ ) . 'views/maintenance.php' );
+            }
+            die();
+        }
+    }
+    
+    add_action( 'acf/init', 'aic_status_check' );
+    function aic_status_check(){
+        $status = get_field( 'enable_maintenance_mode', 'option');
+
+        if( $status != FALSE ){
+            add_action('get_header', 'aic_maintenance_mode');
+        }
+    }
     
 // Theme Colors
 
 	// Custom colors for editor
-
-function aic_editor_colors(){
-    $get_colors = get_field( 'theme_colors', 'option' );
-    $color_array = array();
-
-    foreach( $get_colors as $color ){
-        $custom_colors = array(
-            'name' => __( $color['color_name'], 'genesis-sample' ),
-            'slug' => strtolower( $color['color_name'] ),
-            'color' => $color['color_hex']
-        );
-        $color_array[] = $custom_colors;
-    }
-
-    add_theme_support( 'editor-color-palette', $color_array );
-
-}
-    add_action( 'acf/init', 'aic_editor_colors' );
-    
+        add_action( 'acf/init', 'aic_editor_colors' );
+        function aic_editor_colors(){
+            $get_colors = get_field( 'theme_colors', 'option' );
+            $color_array = array();
+            foreach( $get_colors as $color ){
+                $custom_colors = array(
+                    'name' => __( $color['color_name'], 'genesis-sample' ),
+                    'slug' => strtolower( $color['color_name'] ),
+                    'color' => $color['color_hex']
+                );
+                $color_array[] = $custom_colors;
+            }
+            add_theme_support( 'editor-color-palette', $color_array );
+        }
 
     // Add theme colors to ACF WYSIWYG
 
@@ -175,24 +188,28 @@ function aic_editor_colors(){
         
         $get_colors = get_field( 'theme_colors', 'option');
 
-        $colors = '';
+        if($get_colors != '' ){
+            $colors = '';
 
-        foreach( $get_colors as $color ){
-            $colors .= "'".$color['color_hex']."', ";
+            foreach( $get_colors as $color ){
+                $colors .= "'".$color['color_hex']."', ";
+            }
+            ?>
+            <script type="text/javascript">
+                (function($){
+            
+                    acf.add_filter('color_picker_args', function( args, $field ){
+            
+                        args.palettes = [<?php echo $colors ?> '#ffffff', '#000000']
+                        return args;
+                    });
+            
+                })(jQuery);
+            </script>
+            <?php
+    
         }
-        ?>
-        <script type="text/javascript">
-            (function($){
-        
-                acf.add_filter('color_picker_args', function( args, $field ){
-        
-                    args.palettes = [<?php echo $colors ?> '#ffffff', '#000000']
-                    return args;
-                });
-        
-            })(jQuery);
-        </script>
-        <?php
+
     }
     add_action('acf/input/admin_footer', 'aic_colorpicker_colors');
 
