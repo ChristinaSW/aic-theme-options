@@ -13,9 +13,9 @@ $styles = plugins_url( 'assets/aic-theme-options.css', dirname( __FILE__ ) );
         <title>Under Maintenance</title>
     </head>
     <body>
-        <div class="container">
+        <div class="maintenance-container">
             <div class="main-logo">
-                <img src="<?php echo $logo ?>">
+                <img class="maintenance-img" src="<?php echo $logo ?>">
             </div>
         </div>
     </body>
