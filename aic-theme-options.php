@@ -4,7 +4,7 @@
  * Plugin Name: AIC Theme Options
  * Plugin URI: https://anioncreative.com
  * Description: Adds user options to AIC theme.
- * Version: 3.2.8
+ * Version: 3.2.9
  * Author: An Ion Creative
  * Author URI: https://anioncreative.com
  *
@@ -99,7 +99,7 @@
     add_action( 'wp_enqueue_scripts', 'aic_theme_options_styles' );
     function aic_theme_options_styles(){
         wp_enqueue_style('aic-theme-option-styles', plugin_dir_url( __FILE__ ) . 'assets/aic-theme-options.css' );
-        wp_enqueue_style('aic-theme-option-styles', plugin_dir_url( __FILE__ ) . 'assets/dynamic-aic-theme-options.css' );
+        wp_enqueue_style('dynamic-aic-theme-option-styles', plugin_dir_url( __FILE__ ) . 'assets/dynamic-aic-theme-options.css' );
     }
    
 
