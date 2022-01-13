@@ -141,15 +141,17 @@
         function aic_editor_colors(){
             $get_colors = get_field( 'theme_colors', 'option' );
             $color_array = array();
-            foreach( $get_colors as $color ){
-                $custom_colors = array(
-                    'name' => __( $color['color_name'], 'genesis-sample' ),
-                    'slug' => strtolower( $color['color_name'] ),
-                    'color' => $color['color_hex']
-                );
-                $color_array[] = $custom_colors;
+            if( $get_colors != '' ){
+                foreach( $get_colors as $color ){
+                    $custom_colors = array(
+                        'name' => __( $color['color_name'], 'genesis-sample' ),
+                        'slug' => strtolower( $color['color_name'] ),
+                        'color' => $color['color_hex']
+                    );
+                    $color_array[] = $custom_colors;
+                }
+                add_theme_support( 'editor-color-palette', $color_array );    
             }
-            add_theme_support( 'editor-color-palette', $color_array );
         }
 
     // Add theme colors to ACF WYSIWYG
