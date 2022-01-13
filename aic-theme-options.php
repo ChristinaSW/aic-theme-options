@@ -151,6 +151,17 @@
                     );
                     $color_array[] = $custom_colors;
                 }
+                
+                array_push( $color_array, array(
+                    'name' => 'White',
+                    'slug' => 'white',
+                    'color' => '#ffffff'
+                ),array(
+                    'name' => 'Black',
+                    'slug' => 'black',
+                    'color' => '#000000'
+                ));
+
                 add_theme_support( 'editor-color-palette', $color_array );    
             }
         }

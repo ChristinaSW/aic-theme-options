@@ -8,7 +8,8 @@
   background-position: center right;
 }
 .maintenance-img {
-  width: auto;
+  max-width: 350px;
+  width: 100%;
 }
 .main-logo {
   width: 25%;
