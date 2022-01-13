@@ -1,6 +1,14 @@
 <?php
 
-$logo = get_field( 'logo', 'option' );
+$get_logo_img = get_field( 'logo', 'option' );
+$get_logo_url = get_field( 'image_url', 'option' );
+
+if( $get_logo_url != '' ){
+    $logo = $get_logo_url;
+}else{
+    $logo = $get_logo_img;
+}
+
 $styles = plugins_url( 'assets/aic-theme-options.css', dirname( __FILE__ ) );
 
 ?>

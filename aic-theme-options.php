@@ -4,7 +4,7 @@
  * Plugin Name: AIC Theme Options
  * Plugin URI: https://anioncreative.com
  * Description: Adds user options to AIC theme.
- * Version: 4.0
+ * Version: 4.0.1
  * Author: An Ion Creative
  * Author URI: https://anioncreative.com
  *
@@ -140,9 +140,10 @@
         add_action( 'acf/init', 'aic_editor_colors' );
         function aic_editor_colors(){
             $get_colors = get_field( 'theme_colors', 'option' );
+            $colors = ( $get_colors != '' )?$get_colors:'';
             $color_array = array();
-            if( $get_colors != '' ){
-                foreach( $get_colors as $color ){
+            if( $colors != '' ){
+                foreach( $colors as $color ){
                     $custom_colors = array(
                         'name' => __( $color['color_name'], 'genesis-sample' ),
                         'slug' => strtolower( $color['color_name'] ),
@@ -150,6 +151,17 @@
                     );
                     $color_array[] = $custom_colors;
                 }
+                
+                array_push( $color_array, array(
+                    'name' => 'White',
+                    'slug' => 'white',
+                    'color' => '#ffffff'
+                ),array(
+                    'name' => 'Black',
+                    'slug' => 'black',
+                    'color' => '#000000'
+                ));
+
                 add_theme_support( 'editor-color-palette', $color_array );    
             }
         }
@@ -178,7 +190,7 @@
 
         // change the number of rows in the grid if the number of colors changes
         // 8 swatches per row
-        $init['textcolor_rows'] = 1;
+        $init['textcolor_rows'] = 2;
 
         return $init;
     }
