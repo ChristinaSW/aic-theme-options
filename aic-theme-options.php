@@ -4,7 +4,7 @@
  * Plugin Name: AIC Theme Options
  * Plugin URI: https://anioncreative.com
  * Description: Adds user options to AIC theme.
- * Version: 4.0.2
+ * Version: 4.1.2
  * Author: An Ion Creative
  * Author URI: https://anioncreative.com
  *
@@ -91,8 +91,6 @@
     add_action( 'admin_enqueue_scripts', 'aic_emm_admin_styles' );
     function aic_emm_admin_styles(){
         wp_enqueue_style( 'admin-styles', plugin_dir_url(__FILE__) . '/assets/aic-theme-options-admin-styles.css');
-
-
     }
 
 // Add front end styling
@@ -102,16 +100,18 @@
         wp_enqueue_style('dynamic-aic-theme-option-styles', plugin_dir_url( __FILE__ ) . 'assets/dynamic-aic-theme-options.css' );
     }
    
-
 // Add dynamic styles from ACF options
 
     add_action('parse_request', 'parse_dynamic_css_request');
     function parse_dynamic_css_request($wp) {
-        $ss_dir = plugin_dir_path( __FILE__ ); // Shorten code, save 1 call
-        ob_start(); // Capture all output (output buffering)
-        require($ss_dir . 'assets/dynamic-aic-theme-options.css.php'); // Generate CSS
-        $css = ob_get_clean(); // Get generated CSS (output buffering)
-        file_put_contents($ss_dir . 'assets/dynamic-aic-theme-options.css', $css, LOCK_EX); // Save it
+        $get_colors = get_field( 'theme_colors', 'option' );
+        if( $get_colors != '' ){
+            $ss_dir = plugin_dir_path( __FILE__ ); // Shorten code, save 1 call
+            ob_start(); // Capture all output (output buffering)
+            require($ss_dir . 'assets/dynamic-aic-theme-options.css.php'); // Generate CSS
+            $css = ob_get_clean(); // Get generated CSS (output buffering)
+            file_put_contents($ss_dir . 'assets/dynamic-aic-theme-options.css', $css, LOCK_EX); // Save it    
+        }
     }
 
 // Function to run when maintenance mode is switched on
