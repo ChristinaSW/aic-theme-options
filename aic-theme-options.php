@@ -227,4 +227,23 @@
     }
     add_action('acf/input/admin_footer', 'aic_colorpicker_colors');
 
+// Add color classes so devlopers can use them.
+
+    function add_color_class($post){
+
+        if( have_rows('theme_colors', 'option') ){
+            while( have_rows('theme_colors', 'option') ){
+                the_row();
+                $color_name = strtolower( get_sub_field('color_name') );
+                $color_name = str_replace(' ','-', $color_name);
+                $color_classes = 'Text Color: has-'.$color_name.'-color
+Background Color: has-'.$color_name.'-background-color';
+                
+                update_sub_field( 'field_6213605f5be87', $color_classes, 'option' );
+            }
+        }
+    }
+
+    add_action('acf/save_post', 'add_color_class', 20);
+
 ?>
