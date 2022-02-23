@@ -23,9 +23,8 @@
     margin-top: 30px; 
 }
 
-/* Remove border on logo message */
+/* Company Information Tab */
 
-.acf-fields > .acf-field.acf-field-61a633b815540,
-.acf-fields > .acf-field.acf-field-61e091c091bc2 {
-	border-top: none;
+#logo-message {
+	text-align: center;
 }
