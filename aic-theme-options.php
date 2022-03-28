@@ -22,8 +22,6 @@
     $updater->set_repository( 'aic-theme-options' );
     $updater->initialize();
 
-    
-
 // Check if ACF plugin is already installed and use it instead
 
     if ( in_array( 'advanced-custom-fields-pro/acf.php', apply_filters( 'active_plugins', get_option( 'active_plugins' ) ) ) ) {
@@ -67,25 +65,6 @@
 		
 	}
     
-// Register JQuery
-    add_action( 'acf/input/admin_enqueue_scripts', 'aic_theme_options_java', 11 );
-    function aic_theme_options_java(){
-        wp_register_script( 
-            'acf-collapse-fields-admin-js',
-            esc_url( plugins_url( 'lib/acf-collapse-fields-admin.js', __FILE__ ) ),
-            array( 'jquery' ),
-        );
-
-    // Localize the script with new data
-        $translation_array = array(
-            'expandAll'			=> __( 'Expand All Elements', 'acf-collapse-fields' ),
-            'collapseAll'		=> __( 'Collapse All Elements', 'acf-collapse-fields' )
-        );
-        
-        wp_localize_script( 'acf-collapse-fields-admin-js', 'collapsetranslation', $translation_array );
-        wp_enqueue_script('acf-collapse-fields-admin-js');
-    }
-
 // Add admin styling
 
     add_action( 'admin_enqueue_scripts', 'aic_emm_admin_styles' );
@@ -116,7 +95,7 @@
 
 // Function to run when maintenance mode is switched on
     function aic_maintenance_mode(){
-        if(!current_user_can('edit_themes') || !is_user_logged_in()){
+        if(!current_user_can('administrator')){
            
             if ( file_exists( plugin_dir_path( __FILE__ ) . 'views/maintenance.php' ) ) {
                 require_once( plugin_dir_path( __FILE__ ) . 'views/maintenance.php' );
@@ -246,4 +225,57 @@ Background Color: has-'.$color_name.'-background-color';
 
     add_action('acf/save_post', 'add_color_class', 20);
 
+
+// Hide debug option if not AIC developer
+
+    function dev_only(){
+        $current_user = wp_get_current_user();
+        $current_user = $current_user->user_login;
+
+        if( $current_user != 'super' ){
+
+            echo('
+                <style type="text/css">
+                    .acf-tab-button[data-key="field_6284c7d0bd89e"],
+                    .acf-field.dev-only {
+                        display: none;
+                    }
+                </style>
+            ');
+        }
+    }
+    add_action('admin_head','dev_only');
+
+// Debugging Option
+
+    // Debug switch
+
+        function aic_debug_switch(){
+            $debug_switch = get_field('enable_debug', 'option');
+            
+            if( $debug_switch != false && current_user_can('administrator') ){
+                if( !is_search() && !isset($_GET['debug']) ){
+                    $location = "https://".$_SERVER['SERVER_NAME'].$_SERVER['REQUEST_URI'];
+                    $location .= "?debug=true";
+                    wp_redirect( $location );	
+                }
+                if( isset($_GET['debug']) && $_GET['debug']=='true' ){
+                    error_reporting( E_ALL );
+                    ini_set( 'display_errors', 1 );
+                }
+            }
+        }
+        add_action('template_redirect', 'aic_debug_switch');
+
+    // Variable check function
+
+        function debug_var($var){
+            $user_id = get_current_user_id();
+
+            if(isset($_GET['debug']) && $_GET['debug']=='true' && current_user_can('administrator')){			
+                echo('<pre>');
+                    print_r($var);
+                echo('</pre>');
+            }
+        }
 ?>
