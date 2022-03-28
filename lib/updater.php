@@ -53,7 +53,7 @@ class Smashing_Updater {
 		$args = array();
 
 	        if( $this->authorize_token ) { // Is there an access token?
-		          $args['headers']['Authorization'] = "Bearer {$this->authorize_token}"; // Set the headers
+		          $args['headers']['Authorization'] = "bearer {$this->authorize_token}"; // Set the headers
 	        }
 
 	        $response = json_decode( wp_remote_retrieve_body( wp_remote_get( $request_uri, $args ) ), true ); // Get JSON and parse it
@@ -81,6 +81,7 @@ class Smashing_Updater {
 	}
 
 	public function modify_transient( $transient ) {
+
 		if( property_exists( $transient, 'checked') ) { // Check if transient has a checked property
 
 			if( $checked = $transient->checked ) { // Did Wordpress check for updates?
@@ -106,6 +107,7 @@ class Smashing_Updater {
 				}
 			}
 		}
+
 		return $transient; // Return filtered transient
 	}
 
@@ -121,6 +123,12 @@ class Smashing_Updater {
 				$plugin = array(
 					'name'				=> $this->plugin["Name"],
 					'slug'				=> $this->basename,
+					'requires'					=> '3.3',
+					'tested'						=> '4.4.1',
+					'rating'						=> '100.0',
+					'num_ratings'				=> '10823',
+					'downloaded'				=> '14249',
+					'added'							=> '2016-01-05',
 					'version'			=> $this->github_response['tag_name'],
 					'author'			=> $this->plugin["AuthorName"],
 					'author_profile'	=> $this->plugin["AuthorURI"],
@@ -168,4 +176,3 @@ class Smashing_Updater {
 		return $result;
 	}
 }
-?>
