@@ -4,7 +4,7 @@
  * Plugin Name: AIC Theme Options
  * Plugin URI: https://anioncreative.com
  * Description: Adds user options to AIC theme.
- * Version: 4.2.4
+ * Version: 4.2.5
  * Author: An Ion Creative
  * Author URI: https://anioncreative.com
  *
@@ -215,7 +215,9 @@
                 the_row();
                 $color_name = strtolower( get_sub_field('color_name') );
                 $color_name = str_replace(' ','-', $color_name);
-                $color_classes = 'Text Color: has-'.$color_name.'-color
+                $color_hex = get_sub_field('color_hex');
+                $color_classes = 'Hex: '.$color_hex.'
+Text Color: has-'.$color_name.'-color
 Background Color: has-'.$color_name.'-background-color';
                 
                 update_sub_field( 'field_6213605f5be87', $color_classes, 'option' );
