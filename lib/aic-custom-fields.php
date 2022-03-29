@@ -93,7 +93,7 @@ function aic_fields(){
 						'default_value' => '',
 						'placeholder' => '',
 						'maxlength' => '',
-						'rows' => 2,
+						'rows' => 3,
 						'new_lines' => '',
 						'readonly' => 1,
 					),
