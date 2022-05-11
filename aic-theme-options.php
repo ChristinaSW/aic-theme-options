@@ -4,7 +4,7 @@
  * Plugin Name: AIC Theme Options
  * Plugin URI: https://anioncreative.com
  * Description: Adds user options to AIC theme.
- * Version: 4.2.5
+ * Version: 5.2.5
  * Author: An Ion Creative
  * Author URI: https://anioncreative.com
  *
@@ -22,27 +22,25 @@
     $updater->set_repository( 'aic-theme-options' );
     $updater->initialize();
 
-// Check if ACF plugin is already installed and use it instead
+// Check if ACF plugin is installed and add a notice if it is not
 
+function general_admin_notice(){
+    global $pagenow;
     if ( in_array( 'advanced-custom-fields-pro/acf.php', apply_filters( 'active_plugins', get_option( 'active_plugins' ) ) ) ) {
-        // do stuff only if ACF is installed and active
-        // Define path and URL to the ACF plugin.
-        define( 'MY_ACF_PATH', plugin_dir_path(__DIR__) . 'advanced-custom-fields-pro/' );
-        define( 'MY_ACF_URL', plugin_dir_path(__DIR__) . 'advanced-custom-fields-pro/' );
+         // Define path and URL to the ACF plugin.
+            define( 'MY_ACF_PATH', plugin_dir_path(__DIR__) . 'advanced-custom-fields-pro/' );
+            define( 'MY_ACF_URL', plugin_dir_path(__DIR__) . 'advanced-custom-fields-pro/' );
+        // Include the ACF plugin.
+            include_once( MY_ACF_PATH . 'acf.php' );
     }else{
-        // Define path and URL to the ACF plugin.
-        define( 'MY_ACF_PATH', plugin_dir_path(__FILE__) . 'includes/acf/' );
-        define( 'MY_ACF_URL', plugin_dir_path(__FILE__) . 'includes/acf/' );
-
-        // Hide ACF admin menu if it is not natively installed
-        add_filter('acf/settings/show_admin', 'my_acf_settings_show_admin');
-        function my_acf_settings_show_admin( $show_admin ) {
-            return false;
-        }
+         echo '
+            <div class="notice notice-error is-dismissible">
+                <p>AIC Theme Options will not work without Advanced Custom Fields Pro. Please install and/or activate the ACF Pro plugin A.S.A.P.</p>
+            </div>
+         ';
     }
-
-// Include the ACF plugin.
-    include_once( MY_ACF_PATH . 'acf.php' );
+}
+add_action('admin_notices', 'general_admin_notice');
 
 // Add our custom fields
     include_once( plugin_dir_path(__FILE__) . 'lib/aic-custom-fields.php' );
@@ -63,6 +61,24 @@
 			)
 		);
 		
+	}
+
+// Add Support Ticket Form
+
+    add_action('toplevel_page_aic-theme-options', 'after_acf_options_page', 20);
+	function after_acf_options_page() {
+		/*
+			After ACF finishes get the output and modify it
+		*/
+		$content = ob_get_clean();
+
+		$count = 1; // the number of times we should replace any string
+    
+        $my_content = '<iframe class="clickup-embed clickup-dynamic-height" src="https://forms.clickup.com/1274607/f/16wqf-40/B5U3MXUHVQ8Q9HZRNU" onwheel="" width="100%" height="100%" style="background: transparent; border: 1px solid #ccc;"></iframe><script async src="https://app-cdn.clickup.com/assets/js/forms-embed/v1.js"></script>';
+		$content = str_replace('<div class="acf-field acf-field-message acf-field-61e05723b7bbd" data-name="support-form" data-type="message" data-key="field_61e05723b7bbd">', '<div class="acf-field acf-field-message acf-field-61e05723b7bbd" data-name="support-form" data-type="message" data-key="field_61e05723b7bbd">'.$my_content, $content, $count);
+		
+		// output the new content
+		echo $content;
 	}
     
 // Add admin styling
