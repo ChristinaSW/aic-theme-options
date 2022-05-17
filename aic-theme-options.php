@@ -13,11 +13,8 @@
 
 // Add updater so we can update plugin from github
 
-    if( ! class_exists( 'Smashing_Updater' ) ){
-        include_once( plugin_dir_path( __FILE__ ) . 'lib/updater.php' );
-    }
-
-    $updater = new Smashing_Updater( __FILE__ );
+    include_once( plugin_dir_path(__FILE__).'lib/updater.php');
+    $updater = new AIC_Updater( __FILE__);
     $updater->set_username( 'ChristinaSW' );
     $updater->set_repository( 'aic-theme-options' );
     $updater->initialize();
