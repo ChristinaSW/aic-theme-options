@@ -1,7 +1,13 @@
 <?php
 
 class AIC_Updater{
-	protected $file;
+
+	private $file;
+	private $username;
+	private $repository;
+	private $github_response;
+	private $plugin;
+
 
 	public function __construct( $file ){
 		$this->file = $file;
@@ -15,9 +21,6 @@ class AIC_Updater{
 		 $this->active = is_plugin_active($this->basename);
 	}
 
-	private $username;
-	private $repository;
-	private $github_response;
 
 	public function set_username( $username ){
 		$this->username = $username;
@@ -27,49 +30,48 @@ class AIC_Updater{
 		$this->repository = $repository;
 	}
 
-	public function authorize( $token ){
-		$this->authorize_token = $token;
-	}
+	private function get_repository_info() {
+		if ( is_null( $this->github_response ) ) {
+			$request_uri = sprintf( 'https://api.github.com/repos/%s/%s/releases', $this->username, $this->repository ); // Build URI
 
-	private function get_repository_info(){
-		if( is_null($this->github_response) ){
-			$request_uri = sprintf(
-				'https://api.github.com/repos/%s/%s/releases', $this->username, $this->repository
-			);
-		}
+			$response = json_decode( wp_remote_retrieve_body( wp_remote_get( $request_uri, $args ) ), true ); // Get JSON and parse it
 
-		$response = json_decode( wp_remote_retrieve_body(wp_remote_get($request_uri)),true);
+			if( is_array( $response ) ) {
+				$response = current( $response ); 
+			}
 
-		if( is_array($response) ){
-			$response = current( $response );
+			$this->github_response = $response; // Set it to our property
 		}
 	}
 
-	public function initialize(){
-		add_filter( 'pre_set_transient_update_plugins', array($this, 'modify_transient'),10,1 );
-		add_filter( 'plugins_api', array($this, 'plugin_popup'),10,3 );
-		add_filter( 'upgrader_post_install', array($this, 'after_install'),10,3 );
+	public function initialize() {
+		add_filter( 'pre_set_site_transient_update_plugins', array( $this, 'modify_transient' ), 10, 1 );
+		add_filter( 'plugins_api', array( $this, 'plugin_popup' ), 10, 3);
+		add_filter( 'upgrader_post_install', array( $this, 'after_install' ), 10, 3 );
 	}
 
-	public function modify_transient( $transient ){
-		if( property_exists($transient, 'checked') ){
-			if( $checked = $transient->checked ){
+	public function modify_transient( $transient ) {
+		if( property_exists( $transient, 'checked') ) {
+			if( $checked = $transient->checked ) {
 				$this->get_repository_info();
-				$out_of_date = version_compare( $this->github_response['tag_name'], $checked[$this->basename], 'gt' );
-				if( $out_of_date ){
+				$out_of_date = version_compare( $this->github_response['tag_name'], $checked[ $this->basename ], 'gt' );
+				if( $out_of_date ) {
 					$new_files = $this->github_response['zipball_url'];
-					$slug = current( explode('/', $this->basename) );
-					$plugin = array(
-						'url' => $this->plugin['PluginURI'],
+					$slug = current( explode('/', $this->basename ) );
+
+					$plugin = array( 
+						'url' => $this->plugin["PluginURI"],
 						'slug' => $slug,
 						'package' => $new_files,
-						'new_version' => $this->github_response['tag_name']
+						'new_version' => $this->github_response['tag_name'],
+						'tested' => '5.9.3',
 					);
 
-					$transient->response[ $this->basename ] = (object)$plugin; 
+					$transient->response[$this->basename] = (object) $plugin;
 				}
 			}
 		}
+
 		return $transient;
 	}
 
@@ -101,6 +103,12 @@ class AIC_Updater{
 		return $result;
 	}
 
+	public function download_package( $args, $url ) {
+		remove_filter( 'http_request_args', [ $this, 'download_package' ] );
+
+		return $args;
+	}
+
 	public function after_install( $response, $hook_extra, $result ){
 		global $wp_filesystem;
 
@@ -115,6 +123,5 @@ class AIC_Updater{
 		return $result;
 	}
 }
-
 
 ?>
