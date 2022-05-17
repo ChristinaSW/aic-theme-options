@@ -4,7 +4,7 @@
  * Plugin Name: AIC Theme Options
  * Plugin URI: https://anioncreative.com
  * Description: Adds user options to AIC theme.
- * Version: 5.2.5
+ * Version: 6
  * Author: An Ion Creative
  * Author URI: https://anioncreative.com
  *
