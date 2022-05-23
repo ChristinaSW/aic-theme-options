@@ -1,20 +1,32 @@
-.maintenance-container {
-  background-image: url(https://maintence.s3.us-east-2.amazonaws.com/under-maintenance.jpg);
-  background-repeat: no-repeat;
-  width: 95%;
-  height: 700px;
-  margin: 0 auto;
-  position: relative;
-  background-position: center right;
-}
-.maintenance-img {
-  max-width: 350px;
-  width: 100%;
-}
-.main-logo {
-  width: 25%;
-  margin: 40px 0 100px;
-}
+/* Maintenance Page */
+
+  .maintenance-container {
+    background-image: url(https://maintence.s3.us-east-2.amazonaws.com/under-maintenance.jpg);
+    background-repeat: no-repeat;
+    width: 95%;
+    height: 700px;
+    margin: 0 auto;
+    position: relative;
+    background-position: center right;
+  }
+  .maintenance-img {
+    max-width: 350px;
+    width: 100%;
+  }
+  .main-logo {
+    width: 25%;
+    margin: 40px 0 100px;
+  }
+
+/* Banner */
+
+  .theme-banner {
+    text-align: center;
+    padding: 5px 0;
+  }
+  .theme-banner p {
+    margin: 0;
+  }
 
 /* Mobile */
 
