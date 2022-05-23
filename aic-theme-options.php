@@ -4,7 +4,7 @@
  * Plugin Name: AIC Theme Options
  * Plugin URI: https://anioncreative.com
  * Description: Adds user options to AIC theme.
- * Version: 6.1
+ * Version: 7.0
  * Author: An Ion Creative
  * Author URI: https://anioncreative.com
  *
@@ -293,4 +293,27 @@ Background Color: has-'.$color_name.'-background-color';
                 echo('</pre>');
             }
         }
+
+// Strip Banner
+
+    add_action('genesis_before_header', 'theme_banner');
+    function theme_banner() {
+        $active = get_field('banner_active', 'option');
+
+        if( $active != FALSE ){
+            $background_color = get_field('background_color', 'option');
+            $background = ( $background_color != '' )?'style="background-color: '.$background_color.'"':'';
+            $get_text = get_field('text', 'option');
+            $text = ( $get_text != '' )?$get_text:'';
+            $banner = '
+                <div class="theme-banner"'.$background.'>
+                    '.$text.'
+                </div>
+            ';    
+        }else{
+            $banner = '';
+        }
+
+        echo $banner;
+    }
 ?>
