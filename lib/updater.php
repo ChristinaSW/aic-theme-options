@@ -33,7 +33,7 @@ class AIC_Updater{
 	private function get_repository_info() {
 		if ( is_null( $this->github_response ) ) {
 			$request_uri = sprintf( 'https://api.github.com/repos/%s/%s/releases', $this->username, $this->repository ); // Build URI
-
+			$args = '';
 			$response = json_decode( wp_remote_retrieve_body( wp_remote_get( $request_uri, $args ) ), true ); // Get JSON and parse it
 
 			if( is_array( $response ) ) {
@@ -64,7 +64,7 @@ class AIC_Updater{
 						'slug' => $slug,
 						'package' => $new_files,
 						'new_version' => $this->github_response['tag_name'],
-						'tested' => '5.9.3',
+						'tested' => '6.0',
 					);
 
 					$transient->response[$this->basename] = (object) $plugin;
