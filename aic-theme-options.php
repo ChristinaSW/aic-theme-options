@@ -4,7 +4,7 @@
  * Plugin Name: AIC Theme Options
  * Plugin URI: https://anioncreative.com
  * Description: Adds user options to AIC theme.
- * Version: 7.0
+ * Version: 7.1
  * Author: An Ion Creative
  * Author URI: https://anioncreative.com
  *
@@ -43,22 +43,41 @@ add_action('admin_notices', 'general_admin_notice');
     include_once( plugin_dir_path(__FILE__) . 'lib/aic-custom-fields.php' );
     
 // Create the option page in the admin
-    add_action( 'acf/init', 'aic_option_page' );
-	function aic_option_page(){
-		acf_add_options_page( array(
-				'page_title' 	=> 'Theme Options',
-				'menu_title'	=> 'Theme Options',
-				'menu_slug' 	=> 'aic-theme-options',
+
+    add_action('acf/init', 'aic_option_pages');
+    function aic_option_pages(){
+        // Check function exists
+        if( function_exists('acf_add_options_page') ) {
+
+            // Add parent
+            $parent = acf_add_options_page(array(
+                'page_title' 	=> 'Options',
+				'menu_title'	=> 'Options',
+				'menu_slug' 	=> 'aic-options',
 				'position' 		=> '6',
                 'autoload'      => TRUE,
+                'redirect'      => TRUE,
                 'capability'    => 'edit_theme_options',
                 'icon_url'      => 'dashicons-art',
 				'update_button' => __('Save Settings', 'acf'),
-				'updated_message' => __("Settings Saved", 'acf'),
-			)
-		);
-		
-	}
+				'updated_message' => __("Settings Saved", 'acf')
+            ));
+
+            // Add sub pages
+            $child = acf_add_options_page(array(
+                'page_title'  => __('Theme Options'),
+                'menu_title'  => __('Theme Options'),
+                'menu_slug' 	=> 'aic-theme-options',
+                'parent_slug' => $parent['menu_slug'],
+            ));
+
+            $child = acf_add_options_page(array(
+                'page_title'  => __('Site Options'),
+                'menu_title'  => __('Site Options'),
+                'parent_slug' => $parent['menu_slug'],
+            ));
+        }
+    }
 
 // Add Support Ticket Form
 
