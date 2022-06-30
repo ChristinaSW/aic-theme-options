@@ -4,7 +4,7 @@
  * Plugin Name: AIC Theme Options
  * Plugin URI: https://anioncreative.com
  * Description: Adds user options to AIC theme.
- * Version: 7.1
+ * Version: 7.2
  * Author: An Ion Creative
  * Author URI: https://anioncreative.com
  *
@@ -69,12 +69,16 @@ add_action('admin_notices', 'general_admin_notice');
                 'menu_title'  => __('Theme Options'),
                 'menu_slug' 	=> 'aic-theme-options',
                 'parent_slug' => $parent['menu_slug'],
+		'update_button' => __('Save Settings', 'acf'),
+		'updated_message' => __("Settings Saved", 'acf')
             ));
 
             $child = acf_add_options_page(array(
                 'page_title'  => __('Site Options'),
                 'menu_title'  => __('Site Options'),
                 'parent_slug' => $parent['menu_slug'],
+		'update_button' => __('Save Settings', 'acf'),
+		'updated_message' => __("Settings Saved", 'acf')
             ));
         }
     }
