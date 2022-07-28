@@ -2,8 +2,11 @@
 
 add_action( 'acf/init', 'aic_fields' );
 function aic_fields(){
+	$group_key = 'group_61a631ba28adb';
+	$location = 'aic-theme-options';
+
 	acf_add_local_field_group(array(
-		'key' => 'group_61a631ba28adb',
+		'key' => $group_key,
 		'title' => 'Theme Options',
 		'fields' => array(
 			array(
@@ -27,7 +30,7 @@ function aic_fields(){
 				'label' => '',
 				'name' => 'theme_colors',
 				'type' => 'repeater',
-				'instructions' => '',
+				'instructions' => '<em class="dev-only">Field Name: theme_colors<br />Field Key: field_61a632031d940</em>',
 				'required' => 0,
 				'conditional_logic' => 0,
 				'wrapper' => array(
@@ -46,7 +49,7 @@ function aic_fields(){
 						'label' => 'Color Name',
 						'name' => 'color_name',
 						'type' => 'text',
-						'instructions' => '',
+						'instructions' => '<em class="dev-only">Field Name: color_name<br />Field Key: field_61a6323b1d941</em>',
 						'required' => 0,
 						'conditional_logic' => 0,
 						'wrapper' => array(
@@ -65,7 +68,7 @@ function aic_fields(){
 						'label' => 'Color Hex',
 						'name' => 'color_hex',
 						'type' => 'color_picker',
-						'instructions' => '',
+						'instructions' => '<em class="dev-only">Field Name: color_hex<br />Field Key: field_61a632501d942</em>',
 						'required' => 0,
 						'conditional_logic' => 0,
 						'wrapper' => array(
@@ -82,7 +85,7 @@ function aic_fields(){
 						'label' => 'Color Classes',
 						'name' => 'color_classes',
 						'type' => 'textarea',
-						'instructions' => '',
+						'instructions' => '<em class="dev-only">Field Name: color_classes<br />Field Key: field_6213605f5be87</em>',
 						'required' => 0,
 						'conditional_logic' => 0,
 						'wrapper' => array(
@@ -120,7 +123,7 @@ function aic_fields(){
 				'label' => 'Company Name',
 				'name' => 'company_name',
 				'type' => 'text',
-				'instructions' => '<em>Field Name: company_name</em>',
+				'instructions' => '<em class="dev-only">Field Name: company_name<br />Field Key: field_6216605f5be87</em>',
 				'required' => 0,
 				'conditional_logic' => 0,
 				'wrapper' => array(
@@ -139,7 +142,7 @@ function aic_fields(){
 				'label' => 'Email',
 				'name' => 'email',
 				'type' => 'email',
-				'instructions' => '<em>Field Name: email</em>',
+				'instructions' => '<em class="dev-only">Field Name: email<br />Field Key: field_6216607a5be84</em>',
 				'required' => 0,
 				'conditional_logic' => 0,
 				'wrapper' => array(
@@ -157,7 +160,7 @@ function aic_fields(){
 				'label' => 'Phone Number',
 				'name' => 'phone_number',
 				'type' => 'text',
-				'instructions' => '<em>Field Name: phone_number</em>',
+				'instructions' => '<em class="dev-only">Field Name: phone_number<br />Field Key: field_6216609c5be82</em>',
 				'required' => 0,
 				'conditional_logic' => 0,
 				'wrapper' => array(
@@ -176,7 +179,7 @@ function aic_fields(){
 				'label' => 'Physical Address',
 				'name' => '',
 				'type' => 'accordion',
-				'instructions' => '',
+				'instructions' => '<em class="dev-only">Field Name: physical_address<br />Field Key: field_62744bc94a6b1</em>',
 				'required' => 0,
 				'conditional_logic' => 0,
 				'wrapper' => array(
@@ -193,7 +196,7 @@ function aic_fields(){
 				'label' => 'Street',
 				'name' => 'physical_street',
 				'type' => 'textarea',
-				'instructions' => '<em>Field Name: physical_street</em>',
+				'instructions' => '<em class="dev-only">Field Name: physical_street<br />Field Key: field_62744c394a6b5</em>',
 				'required' => 0,
 				'conditional_logic' => 0,
 				'wrapper' => array(
@@ -212,7 +215,7 @@ function aic_fields(){
 				'label' => 'City',
 				'name' => 'physical_city',
 				'type' => 'text',
-				'instructions' => '<em>Field Name: physical_city</em>',
+				'instructions' => '<em class="dev-only">Field Name: physical_city<br />Field Key: field_62744c5f4a6b7</em>',
 				'required' => 0,
 				'conditional_logic' => 0,
 				'wrapper' => array(
@@ -231,7 +234,7 @@ function aic_fields(){
 				'label' => 'State',
 				'name' => 'physical_state',
 				'type' => 'text',
-				'instructions' => '<em>Field Name: physical_state</em>',
+				'instructions' => '<em class="dev-only">Field Name: physical_state<br />Field Key: field_62744c6a4a6b8</em>',
 				'required' => 0,
 				'conditional_logic' => 0,
 				'wrapper' => array(
@@ -250,7 +253,7 @@ function aic_fields(){
 				'label' => 'Zip',
 				'name' => 'physical_zip',
 				'type' => 'text',
-				'instructions' => '<em>Field Name: physical_zip</em>',
+				'instructions' => '<em class="dev-only">Field Name: physical_zip<br />Field Key: field_62744c984a6b9</em>',
 				'required' => 0,
 				'conditional_logic' => 0,
 				'wrapper' => array(
@@ -286,7 +289,7 @@ function aic_fields(){
 				'label' => 'Mailing Address',
 				'name' => '',
 				'type' => 'accordion',
-				'instructions' => '',
+				'instructions' => '<em class="dev-only">Field Name: mailing_address<br />Field Key: field_62744c0b4a6b3</em>',
 				'required' => 0,
 				'conditional_logic' => 0,
 				'wrapper' => array(
@@ -303,7 +306,7 @@ function aic_fields(){
 				'label' => 'Street',
 				'name' => 'mailing_street',
 				'type' => 'textarea',
-				'instructions' => '<em>Field Name: mailing_street</em>',
+				'instructions' => '<em class="dev-only">Field Name: mailing_street<br />Field Key: field_62744d434a6bb</em>',
 				'required' => 0,
 				'conditional_logic' => 0,
 				'wrapper' => array(
@@ -322,7 +325,7 @@ function aic_fields(){
 				'label' => 'City',
 				'name' => 'mailing_city',
 				'type' => 'text',
-				'instructions' => '<em>Field Name: mailing_city</em>',
+				'instructions' => '<em class="dev-only">Field Name: mailing_city<br />Field Key: field_62744d554a6bc</em>',
 				'required' => 0,
 				'conditional_logic' => 0,
 				'wrapper' => array(
@@ -341,7 +344,7 @@ function aic_fields(){
 				'label' => 'State',
 				'name' => 'mailing_state',
 				'type' => 'text',
-				'instructions' => '<em>Field Name: mailing_state</em>',
+				'instructions' => '<em class="dev-only">Field Name: mailing_state<br />Field Key: field_62744d874a6bd</em>',
 				'required' => 0,
 				'conditional_logic' => 0,
 				'wrapper' => array(
@@ -360,7 +363,7 @@ function aic_fields(){
 				'label' => 'Zip',
 				'name' => 'mailing_zip',
 				'type' => 'text',
-				'instructions' => '<em>Field Name: mailing_zip</em>',
+				'instructions' => '<em class="dev-only">Field Name: mailing_zip<br />Field Key: field_62744d944a6be</em>',
 				'required' => 0,
 				'conditional_logic' => 0,
 				'wrapper' => array(
@@ -413,7 +416,7 @@ function aic_fields(){
 				'label' => '',
 				'name' => 'logo',
 				'type' => 'image',
-				'instructions' => '<em>Field Name: logo</em>',
+				'instructions' => '<em class="dev-only">Field Name: logo<br />Field Key: field_61a633b815540</em>',
 				'required' => 0,
 				'conditional_logic' => 0,
 				'wrapper' => array(
@@ -437,7 +440,7 @@ function aic_fields(){
 				'label' => '',
 				'name' => 'image_url',
 				'type' => 'url',
-				'instructions' => '<em>Field Name: image_url</em>',
+				'instructions' => '<em class="dev-only">Field Name: image_url<br />Field Key: field_61e091c091bc2</em>',
 				'required' => 0,
 				'conditional_logic' => 0,
 				'wrapper' => array(
@@ -469,7 +472,7 @@ function aic_fields(){
 				'label' => 'Activate?',
 				'name' => 'banner_active',
 				'type' => 'true_false',
-				'instructions' => '',
+				'instructions' => '<em class="dev-only">Field Name: banner_active<br />Field Key: field_61a332bd1d944</em>',
 				'required' => 0,
 				'conditional_logic' => 0,
 				'wrapper' => array(
@@ -488,7 +491,7 @@ function aic_fields(){
 				'label' => 'Background Color',
 				'name' => 'background_color',
 				'type' => 'color_picker',
-				'instructions' => '',
+				'instructions' => '<em class="dev-only">Field Name: background_color<br />Field Key: field_628b9f6bae548</em>',
 				'required' => 0,
 				'conditional_logic' => 0,
 				'wrapper' => array(
@@ -505,7 +508,7 @@ function aic_fields(){
 				'label' => 'Text',
 				'name' => 'text',
 				'type' => 'wysiwyg',
-				'instructions' => '',
+				'instructions' => '<em class="dev-only">Field Name: text<br />Field Key: field_628b9f81d21c9</em>',
 				'required' => 0,
 				'conditional_logic' => 0,
 				'wrapper' => array(
@@ -540,7 +543,7 @@ function aic_fields(){
 				'label' => 'Enable Maintenance Mode?',
 				'name' => 'enable_maintenance_mode',
 				'type' => 'true_false',
-				'instructions' => '',
+				'instructions' => '<em class="dev-only">Field Name: enable_maintenance_mode<br />Field Key: field_61a632bd1d944</em>',
 				'required' => 0,
 				'conditional_logic' => 0,
 				'wrapper' => array(
@@ -559,7 +562,7 @@ function aic_fields(){
 				'label' => 'Enable Debugging?',
 				'name' => 'enable_debug',
 				'type' => 'true_false',
-				'instructions' => '',
+				'instructions' => '<em class="dev-only">Field Name: enable_debug<br />Field Key: field_6354c7651000d</em>',
 				'required' => 0,
 				'conditional_logic' => 0,
 				'wrapper' => array(
@@ -592,7 +595,7 @@ function aic_fields(){
 			array(
 				'key' => 'field_61e05723b7bbd',
 				'label' => '',
-				'name' => 'support-form',
+				'name' => '',
 				'type' => 'message',
 				'instructions' => '',
 				'required' => 0,
@@ -606,14 +609,141 @@ function aic_fields(){
 				'new_lines' => '',
 				'esc_html' => 0,
 			),
+			array(
+				'key' => 'field_62dff6febee11',
+				'label' => 'AIC Options',
+				'name' => '',
+				'type' => 'tab',
+				'instructions' => '',
+				'required' => 0,
+				'conditional_logic' => 0,
+				'wrapper' => array(
+					'width' => '',
+					'class' => '',
+					'id' => '',
+				),
+				'placement' => 'top',
+				'endpoint' => 0,
+			),
+			array(
+				'key' => 'field_62dff88dbee13',
+				'label' => 'Disable Editor',
+				'name' => 'disable_editor_list',
+				'type' => 'relationship',
+				'instructions' => '',
+				'required' => 0,
+				'conditional_logic' => 0,
+				'wrapper' => array(
+					'width' => '',
+					'class' => 'dev-only',
+					'id' => '',
+				),
+				'post_type' => '',
+				'taxonomy' => '',
+				'filters' => array(
+					0 => 'post_type',
+					1 => 'taxonomy',
+				),
+				'elements' => '',
+				'min' => '',
+				'max' => '',
+				'return_format' => 'object',
+			),
+			array(
+				'key' => 'field_62dff92f6323f',
+				'label' => 'Tabs Visibility',
+				'name' => 'tabs_visibility',
+				'type' => 'checkbox',
+				'instructions' => '',
+				'required' => 0,
+				'conditional_logic' => 0,
+				'wrapper' => array(
+					'width' => '49',
+					'class' => 'dev-only',
+					'id' => '',
+				),
+				'choices' => array(
+					'field_62dfece34969c' => 'Theme Colors',
+					'field_62dfee2718a1b' => 'Company Information',
+					'field_627bd8be73608' => 'Banner',
+					'field_62dff3f6eda29' => 'Maintence/Debugging',
+					'field_62dff4fdeda2c' => 'Support Ticket',
+				),
+				'allow_custom' => 0,
+				'default_value' => array(
+				),
+				'layout' => 'vertical',
+				'toggle' => 0,
+				'return_format' => 'value',
+				'save_custom' => 0,
+			),
+			array(
+				'key' => 'field_62e04c22c74e3',
+				'label' => 'Other Options Visibility',
+				'name' => 'other_options_visibility',
+				'type' => 'repeater',
+				'instructions' => '',
+				'required' => 0,
+				'conditional_logic' => 0,
+				'wrapper' => array(
+					'width' => '49',
+					'class' => '',
+					'id' => '',
+				),
+				'collapsed' => 'field_62e04c41c74e8',
+				'min' => 0,
+				'max' => 0,
+				'layout' => 'table',
+				'button_label' => 'Add Field',
+				'sub_fields' => array(
+					array(
+						'key' => 'field_62e04c41c74e8',
+						'label' => 'Field Name',
+						'name' => 'field_name',
+						'type' => 'text',
+						'instructions' => '',
+						'required' => 0,
+						'conditional_logic' => 0,
+						'wrapper' => array(
+							'width' => '49',
+							'class' => '',
+							'id' => '',
+						),
+						'default_value' => '',
+						'placeholder' => '',
+						'prepend' => '',
+						'append' => '',
+						'maxlength' => '',
+					),
+					array(
+						'key' => 'field_62e04c57c74e0',
+						'label' => 'Field Key',
+						'name' => 'field_key',
+						'type' => 'text',
+						'instructions' => '',
+						'required' => 0,
+						'conditional_logic' => 0,
+						'wrapper' => array(
+							'width' => '49',
+							'class' => '',
+							'id' => '',
+						),
+						'default_value' => '',
+						'placeholder' => '',
+						'prepend' => '',
+						'append' => '',
+						'maxlength' => '',
+					),
+				),
+			),
 		),
 		'location' => array(
 			array(
 				array(
 					'param' => 'options_page',
 					'operator' => '==',
-					'value' => 'aic-theme-options',
-				),
+					'value' => 'aic-theme-options'
+				)
 			),
 		),
 		'menu_order' => 0,
