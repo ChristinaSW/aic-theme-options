@@ -4,7 +4,7 @@
  * Plugin Name: AIC Theme Options
  * Plugin URI: https://anioncreative.com
  * Description: Adds user options to AIC theme.
- * Version: 7.2
+ * Version: 7.3
  * Author: An Ion Creative
  * Author URI: https://anioncreative.com
  *
@@ -21,23 +21,23 @@
 
 // Check if ACF plugin is installed and add a notice if it is not
 
-function general_admin_notice(){
-    global $pagenow;
-    if ( in_array( 'advanced-custom-fields-pro/acf.php', apply_filters( 'active_plugins', get_option( 'active_plugins' ) ) ) ) {
-         // Define path and URL to the ACF plugin.
-            define( 'MY_ACF_PATH', plugin_dir_path(__DIR__) . 'advanced-custom-fields-pro/' );
-            define( 'MY_ACF_URL', plugin_dir_path(__DIR__) . 'advanced-custom-fields-pro/' );
-        // Include the ACF plugin.
-            include_once( MY_ACF_PATH . 'acf.php' );
-    }else{
-         echo '
-            <div class="notice notice-error is-dismissible">
-                <p>AIC Theme Options will not work without Advanced Custom Fields Pro. Please install and/or activate the ACF Pro plugin A.S.A.P.</p>
-            </div>
-         ';
+    function general_admin_notice(){
+        global $pagenow;
+        if ( in_array( 'advanced-custom-fields-pro/acf.php', apply_filters( 'active_plugins', get_option( 'active_plugins' ) ) ) ) {
+            // Define path and URL to the ACF plugin.
+                define( 'MY_ACF_PATH', plugin_dir_path(__DIR__) . 'advanced-custom-fields-pro/' );
+                define( 'MY_ACF_URL', plugin_dir_path(__DIR__) . 'advanced-custom-fields-pro/' );
+            // Include the ACF plugin.
+                include_once( MY_ACF_PATH . 'acf.php' );
+        }else{
+            echo '
+                <div class="notice notice-error is-dismissible">
+                    <p>AIC Theme Options will not work without Advanced Custom Fields Pro. Please install and/or activate the ACF Pro plugin A.S.A.P.</p>
+                </div>
+            ';
+        }
     }
-}
-add_action('admin_notices', 'general_admin_notice');
+    add_action('admin_notices', 'general_admin_notice');
 
 // Add our custom fields
     include_once( plugin_dir_path(__FILE__) . 'lib/aic-custom-fields.php' );
@@ -130,6 +130,7 @@ add_action('admin_notices', 'general_admin_notice');
     }
 
 // Function to run when maintenance mode is switched on
+
     function aic_maintenance_mode(){
         if(!current_user_can('administrator')){
            
@@ -264,18 +265,37 @@ Background Color: has-'.$color_name.'-background-color';
     add_action('acf/save_post', 'add_color_class', 20);
 
 
-// Hide debug option if not AIC developer
+// Hide if not AIC developer
 
     function dev_only(){
         $current_user = wp_get_current_user();
         $current_user = $current_user->user_login;
+        $choices = get_field('tabs_visibility', 'option');
+        $hide_tab = '';
+        if( $choices != '' ){
+            foreach( $choices as $choice ){
+                $hide_tab .= '.acf-tab-button[data-key="'.$choice.'"],';
+            }
+        }
+        $chosen_fields = get_field('other_options_visibility', 'option');
+        $filters = '';
+        // echo '<pre>';print_r($chosen_fields);echo '</pre>';
+        if( $chosen_fields != '' ){
+            foreach( $chosen_fields as $chosen_field ){
+                $filters .= add_filter('acf/load_field/key='.$chosen_field['field_key'].'', 'aic_hide');
+            }
+            echo $filters;
+        }
 
         if( $current_user != 'super' ){
 
             echo('
                 <style type="text/css">
                     .acf-tab-button[data-key="field_6284c7d0bd89e"],
-                    .acf-field.dev-only {
+                    .acf-tab-button[data-key="field_62dff6febee11"],
+                    '.$hide_tab.'
+                    .acf-field.dev-only,
+                    .dev-only {
                         display: none;
                     }
                 </style>
@@ -283,6 +303,14 @@ Background Color: has-'.$color_name.'-background-color';
         }
     }
     add_action('admin_head','dev_only');
+
+// Function adding the dev-only class
+
+    function aic_hide($field){
+            
+        $field['wrapper']['class'] = 'dev-only';
+        return $field;  
+    }
 
 // Debugging Option
 
@@ -339,4 +367,5 @@ Background Color: has-'.$color_name.'-background-color';
 
         echo $banner;
     }
+
 ?>
