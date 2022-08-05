@@ -663,11 +663,11 @@ function aic_fields(){
 					'id' => '',
 				),
 				'choices' => array(
-					'field_62dfece34969c' => 'Theme Colors',
-					'field_62dfee2718a1b' => 'Company Information',
+					'field_61a631c11d93f' => 'Theme Colors',
+					'field_6216604e5be82' => 'Company Information',
 					'field_627bd8be73608' => 'Banner',
-					'field_62dff3f6eda29' => 'Maintence/Debugging',
-					'field_62dff4fdeda2c' => 'Support Ticket',
+					'field_61a632871d943' => 'Maintence/Debugging',
+					'field_61a635871d943' => 'Support Ticket',
 				),
 				'allow_custom' => 0,
 				'default_value' => array(
