@@ -595,7 +595,7 @@ function aic_fields(){
 			array(
 				'key' => 'field_61e05723b7bbd',
 				'label' => '',
-				'name' => '',
+				'name' => 'support-form',
 				'type' => 'message',
 				'instructions' => '',
 				'required' => 0,
