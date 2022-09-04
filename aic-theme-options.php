@@ -4,7 +4,7 @@
  * Plugin Name: AIC Theme Options
  * Plugin URI: https://anioncreative.com
  * Description: Adds user options to AIC theme.
- * Version: 8
+ * Version: 8.1
  * Author: An Ion Creative
  * Author URI: https://anioncreative.com
  *
@@ -188,20 +188,21 @@
     // Add theme colors to ACF WYSIWYG
 
     function aic_theme_wysiwyg_colors($init) {
-
+        
         $custom_colors = '';
         $get_colors = get_field( 'theme_colors', 'option');
 
-        foreach( $get_colors as $color ){
-            $get_hex = str_replace('#', '', $color['color_hex']);
-            $c_name = $color['color_name'];
-            $custom_colors .= '"'.$get_hex.'", "'.$c_name.'",';
+	if( $get_colors != '' ){
+                foreach( $get_colors as $color ){
+                        $get_hex = str_replace('#', '', $color['color_hex']);
+                        $c_name = $color['color_name'];
+                        $custom_colors .= '"'.$get_hex.'", "'.$c_name.'",';
+                }
         }
 
         $custom_colors .= '
             "000000", "Black",
             "FFFFFF", "White",
-            "808080", "Gray"
         ';
 
         // build colour grid default+custom colors
