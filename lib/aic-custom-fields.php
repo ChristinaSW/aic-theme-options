@@ -539,6 +539,33 @@ function aic_fields(){
 				'endpoint' => 0,
 			),
 			array(
+				'key' => 'field_633085e86f965',
+				'label' => 'IP Address',
+				'name' => 'ip_address',
+				'type' => 'text',
+				'instructions' => '',
+				'required' => 0,
+				'conditional_logic' => array(
+					array(
+						array(
+							'field' => 'field_6354c7651000d',
+							'operator' => '==',
+							'value' => '1',
+						),
+					),
+				),
+				'wrapper' => array(
+					'width' => '',
+					'class' => '',
+					'id' => '',
+				),
+				'default_value' => '',
+				'placeholder' => '',
+				'prepend' => '',
+				'append' => '',
+				'maxlength' => '',
+			),
+			array(
 				'key' => 'field_61a632bd1d944',
 				'label' => 'Enable Maintenance Mode?',
 				'name' => 'enable_maintenance_mode',
