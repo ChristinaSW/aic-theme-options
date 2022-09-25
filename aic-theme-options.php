@@ -4,7 +4,7 @@
  * Plugin Name: AIC Theme Options
  * Plugin URI: https://anioncreative.com
  * Description: Adds user options to AIC theme.
- * Version: 8.1
+ * Version: 8.2
  * Author: An Ion Creative
  * Author URI: https://anioncreative.com
  *
@@ -322,8 +322,9 @@ Background Color: has-'.$color_name.'-background-color';
 
         function aic_debug_switch(){
             $debug_switch = get_field('enable_debug', 'option');
+	    $ip = get_field('ip_address', 'option');
             
-            if( $debug_switch != false && current_user_can('administrator') ){
+            if( $debug_switch != false && $_SERVER['REMOTE_ADDR'] == $ip ){
                 if( !is_search() && !isset($_GET['debug']) ){
                     $location = "https://".$_SERVER['SERVER_NAME'].$_SERVER['REQUEST_URI'];
                     $location .= "?debug=true";
@@ -341,8 +342,9 @@ Background Color: has-'.$color_name.'-background-color';
 
         function debug_var($var){
             $user_id = get_current_user_id();
+	    $ip = get_field('ip_address', 'option');
 
-            if(isset($_GET['debug']) && $_GET['debug']=='true' && current_user_can('administrator')){			
+            if(isset($_GET['debug']) && $_GET['debug']=='true' && $_SERVER['REMOTE_ADDR'] == $ip){			
                 echo('<pre>');
                     print_r($var);
                 echo('</pre>');
@@ -371,5 +373,41 @@ Background Color: has-'.$color_name.'-background-color';
 
         echo $banner;
     }
+
+// Disable Gutenberg Editor
+
+    function aic_disable_editor( $id = false ) {
+
+        $block_disable_list = get_field('disable_editor_list', 'options');
+
+        if( $block_disable_list == '' ){
+            return;
+        }
+
+        $list = array();
+
+        foreach( $block_disable_list as $p_id ){
+            $list[] .= $p_id->ID;
+        }
+
+        $excluded_ids = $list;
+
+        return $excluded_ids;
+    }
+
+    function aic_disable_gutenberg( $can_edit, $post_type ) {
+
+        if( ! ( is_admin() && !empty( $_GET['post'] ) ) )
+            return $can_edit;
+
+        if( aic_disable_editor( $_GET['post'] ) )
+            $can_edit = false;
+
+        return $can_edit;
+
+    }
+    add_filter( 'gutenberg_can_edit_post_type', 'aic_disable_gutenberg', 10, 2 );
+    add_filter( 'use_block_editor_for_post_type', 'aic_disable_gutenberg', 10, 2 );
+
 
 ?>
