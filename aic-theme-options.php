@@ -4,7 +4,7 @@
  * Plugin Name: AIC Theme Options
  * Plugin URI: https://anioncreative.com
  * Description: Adds user options to AIC theme.
- * Version: 8.2
+ * Version: 8.3
  * Author: An Ion Creative
  * Author URI: https://anioncreative.com
  *
@@ -72,16 +72,16 @@
                 'menu_title'  => __('Theme Options'),
                 'menu_slug' 	=> 'aic-theme-options',
                 'parent_slug' => $parent['menu_slug'],
-		'update_button' => __('Save Settings', 'acf'),
-		'updated_message' => __("Settings Saved", 'acf')
+                'update_button' => __('Save Settings', 'acf'),
+                'updated_message' => __("Settings Saved", 'acf')
             ));
 
             $child = acf_add_options_page(array(
                 'page_title'  => __('Site Options'),
                 'menu_title'  => __('Site Options'),
                 'parent_slug' => $parent['menu_slug'],
-		'update_button' => __('Save Settings', 'acf'),
-		'updated_message' => __("Settings Saved", 'acf')
+                'update_button' => __('Save Settings', 'acf'),
+                'updated_message' => __("Settings Saved", 'acf')
             ));
         }
     }
@@ -318,33 +318,13 @@ Background Color: has-'.$color_name.'-background-color';
 
 // Debugging Option
 
-    // Debug switch
-
-        function aic_debug_switch(){
-            $debug_switch = get_field('enable_debug', 'option');
-	    $ip = get_field('ip_address', 'option');
-            
-            if( $debug_switch != false && $_SERVER['REMOTE_ADDR'] == $ip ){
-                if( !is_search() && !isset($_GET['debug']) ){
-                    $location = "https://".$_SERVER['SERVER_NAME'].$_SERVER['REQUEST_URI'];
-                    $location .= "?debug=true";
-                    wp_redirect( $location );	
-                }
-                if( isset($_GET['debug']) && $_GET['debug']=='true' ){
-                    error_reporting( E_ALL );
-                    ini_set( 'display_errors', 1 );
-                }
-            }
-        }
-        add_action('template_redirect', 'aic_debug_switch');
-
-    // Variable check function
-
         function debug_var($var){
-            $user_id = get_current_user_id();
-	    $ip = get_field('ip_address', 'option');
+            $debug_switch = get_field('enable_debug', 'option');
+            $ip = get_field('ip_address', 'option');
 
-            if(isset($_GET['debug']) && $_GET['debug']=='true' && $_SERVER['REMOTE_ADDR'] == $ip){			
+            if($debug_switch != false && $_SERVER['REMOTE_ADDR'] == $ip){
+                error_reporting( E_ALL );
+                ini_set( 'display_errors', 1 );			
                 echo('<pre>');
                     print_r($var);
                 echo('</pre>');
