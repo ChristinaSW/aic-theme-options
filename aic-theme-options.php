@@ -4,7 +4,7 @@
  * Plugin Name: AIC Theme Options
  * Plugin URI: https://anioncreative.com
  * Description: Adds user options to AIC theme.
- * Version: 8.3
+ * Version: 9
  * Author: An Ion Creative
  * Author URI: https://anioncreative.com
  *
@@ -88,21 +88,16 @@
 
 // Add Support Ticket Form
 
-    add_action('toplevel_page_aic-theme-options', 'after_acf_options_page', 20);
-	function after_acf_options_page() {
-		/*
-			After ACF finishes get the output and modify it
-		*/
-		$content = ob_get_clean();
+add_filter('acf/prepare_field/key=field_61e05723b7bbd', 'aic_support');
+function aic_support( $field ) {
 
-		$count = 1; // the number of times we should replace any string
-    
-        $my_content = '<iframe class="clickup-embed clickup-dynamic-height" src="https://forms.clickup.com/1274607/f/16wqf-40/B5U3MXUHVQ8Q9HZRNU" onwheel="" width="100%" height="100%" style="background: transparent; border: 1px solid #ccc;"></iframe><script async src="https://app-cdn.clickup.com/assets/js/forms-embed/v1.js"></script>';
-		$content = str_replace('<div class="acf-field acf-field-message acf-field-61e05723b7bbd" data-name="support-form" data-type="message" data-key="field_61e05723b7bbd">', '<div class="acf-field acf-field-message acf-field-61e05723b7bbd" data-name="support-form" data-type="message" data-key="field_61e05723b7bbd">'.$my_content, $content, $count);
-		
-		// output the new content
-		echo $content;
-	}
+    if( is_admin() ){
+        echo '
+            <iframe class="clickup-embed clickup-dynamic-height" src="https://forms.clickup.com/1274607/f/16wqf-40/B5U3MXUHVQ8Q9HZRNU" onwheel="" width="100%" height="100%" style="background: transparent; border: 1px solid #ccc;"></iframe><script async src="https://app-cdn.clickup.com/assets/js/forms-embed/v1.js"></script>
+        ';
+    }
+    return $field;
+}
     
 // Add admin styling
 
