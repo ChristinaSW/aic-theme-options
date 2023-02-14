@@ -4,7 +4,7 @@
  * Plugin Name: AIC Theme Options
  * Plugin URI: https://anioncreative.com
  * Description: Adds user options to AIC theme.
- * Version: 9.2
+ * Version: 9.3
  * Author: An Ion Creative
  * Author URI: https://anioncreative.com
  *
@@ -88,16 +88,20 @@
 
 // Add Support Ticket Form
 
-add_filter('acf/prepare_field/key=field_61e05723b7bbd', 'aic_support');
-function aic_support( $field ) {
+    add_filter( 'wp_kses_allowed_html', 'acf_add_allowed_iframe_tag', 10, 2 );
+    function acf_add_allowed_iframe_tag( $tags, $context ) {
+        if ( $context === 'acf' ) {
+            $tags['iframe'] = array(
+                'src'             => true,
+                'height'          => true,
+                'width'           => true,
+                'frameborder'     => true,
+                'allowfullscreen' => true,
+            );
+        }
 
-    if( is_admin() ){
-        echo '
-            <iframe class="clickup-embed clickup-dynamic-height" src="https://forms.clickup.com/1274607/f/16wqf-40/B5U3MXUHVQ8Q9HZRNU" onwheel="" width="100%" height="100%" style="background: transparent; border: 1px solid #ccc;"></iframe><script async src="https://app-cdn.clickup.com/assets/js/forms-embed/v1.js"></script>
-        ';
+        return $tags;
     }
-    return $field;
-}
     
 // Add admin styling
 
