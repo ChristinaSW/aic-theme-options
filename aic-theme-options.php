@@ -151,6 +151,28 @@
             add_action('get_header', 'aic_maintenance_mode');
         }
     }
+
+// Function to run when a site is suspended
+
+    function aic_suspension_mode(){
+        $ip = get_field('ip_address', 'option');
+        if($_SERVER['REMOTE_ADDR'] != $ip){
+        
+            if ( file_exists( plugin_dir_path( __FILE__ ) . 'views/suspended.php' ) ) {
+                require_once( plugin_dir_path( __FILE__ ) . 'views/suspended.php' );
+            }
+            die();
+        }
+    }
+
+    add_action( 'acf/init', 'aic_suspension_check' );
+    function aic_suspension_check(){
+        $status = get_field( 'suspend_site', 'option');
+
+        if( $status != FALSE ){
+            add_action('get_header', 'aic_suspension_mode');
+        }
+    }
     
 // Theme Colors
 
