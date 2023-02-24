@@ -544,11 +544,18 @@ function aic_fields(){
 				'name' => 'ip_address',
 				'type' => 'text',
 				'instructions' => '',
-				'required' => 0,
+				'required' => 1,
 				'conditional_logic' => array(
 					array(
 						array(
 							'field' => 'field_6354c7651000d',
+							'operator' => '==',
+							'value' => '1',
+						),
+					),
+					array(
+						array(
+							'field' => 'field_63f8e9047d7c6',
 							'operator' => '==',
 							'value' => '1',
 						),
@@ -574,7 +581,7 @@ function aic_fields(){
 				'required' => 0,
 				'conditional_logic' => 0,
 				'wrapper' => array(
-					'width' => '49',
+					'width' => '33',
 					'class' => '',
 					'id' => '',
 				),
@@ -593,7 +600,26 @@ function aic_fields(){
 				'required' => 0,
 				'conditional_logic' => 0,
 				'wrapper' => array(
-					'width' => '49',
+					'width' => '33',
+					'class' => 'dev-only',
+					'id' => '',
+				),
+				'message' => '',
+				'default_value' => 0,
+				'ui' => 1,
+				'ui_on_text' => '',
+				'ui_off_text' => '',
+			),
+			array(
+				'key' => 'field_63f8e9047d7c6',
+				'label' => 'Suspend Site?',
+				'name' => 'suspend_site',
+				'type' => 'true_false',
+				'instructions' => '<em class="dev-only">Field Name: suspend_site<br />Field Key: field_63f8e9047d7c6</em>',
+				'required' => 0,
+				'conditional_logic' => 0,
+				'wrapper' => array(
+					'width' => '33',
 					'class' => 'dev-only',
 					'id' => '',
 				),
