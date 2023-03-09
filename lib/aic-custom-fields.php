@@ -700,7 +700,7 @@ function aic_fields(){
 				'elements' => '',
 				'min' => '',
 				'max' => '',
-				'return_format' => 'object',
+				'return_format' => 'id',
 			),
 			array(
 				'key' => 'field_62dff92f6323f',
