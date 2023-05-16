@@ -408,4 +408,42 @@ Background Color: has-'.$color_name.'-background-color';
     add_filter( 'gutenberg_can_edit_post_type', 'aic_disable_gutenberg', 10, 2 );
     add_filter( 'use_block_editor_for_post_type', 'aic_disable_gutenberg', 10, 2 );
     add_action( 'admin_head', 'aic_disable_editor' );
+
+// Shortcodes for company information
+
+	// Email
+
+	add_shortcode('email', 'email_func');
+	function email_func($attr){
+		if( isset($attr['text']) ){
+			$link_text = $attr['text'];
+		}else{
+			$link_text = 'Email';
+		}
+
+		$email = ( get_field('email', 'option') != '' )?'<a href="mailto:'.get_field('email', 'option').'">'.$link_text.'</a>':'';
+
+		return $email;
+	}
+
+	// Phone Number
+
+	add_shortcode('phone-number', 'phone_number_func');
+	function phone_number_func($attr){
+		$number = get_field('phone_number','option');
+		if( isset($attr['text']) ){
+			$link_text = $attr['text'];
+		}else{
+			$link_text = $number;
+		}
+
+		if( $number != '' ){
+			$number = '<a href="tel:'.preg_replace('/[^A-Za-z0-9]/', '', $number).'">'.$link_text.'</a>';
+		}else{
+			$number = '';
+		}
+
+		return $number;
+	}
+
 ?>
