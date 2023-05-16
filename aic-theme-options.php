@@ -4,7 +4,7 @@
  * Plugin Name: AIC Theme Options
  * Plugin URI: https://anioncreative.com
  * Description: Adds user options to AIC theme.
- * Version: 10.0
+ * Version: 10.1
  * Author: An Ion Creative
  * Author URI: https://anioncreative.com
  *
@@ -385,13 +385,7 @@ Background Color: has-'.$color_name.'-background-color';
             return;
         }
 
-        $excluded_ids = array();
-
-        foreach( $block_disable_list as $p_id ){
-            $excluded_ids[] .= $p_id->ID;
-        }
-
-        return in_array( $id, $excluded_ids );
+        return in_array( $id, $block_disable_list );
     }
 
     function aic_disable_gutenberg( $can_edit, $post_type ) {
