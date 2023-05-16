@@ -142,7 +142,7 @@ function aic_fields(){
 				'label' => 'Email',
 				'name' => 'email',
 				'type' => 'email',
-				'instructions' => '<em class="dev-only">Field Name: email<br />Field Key: field_6216607a5be84</em>',
+				'instructions' => '<em class="dev-only">Field Name: email<br />Field Key: field_6216607a5be84</em><p>shortcode: [email text="<em>link text</em>]</p>',
 				'required' => 0,
 				'conditional_logic' => 0,
 				'wrapper' => array(
@@ -160,7 +160,7 @@ function aic_fields(){
 				'label' => 'Phone Number',
 				'name' => 'phone_number',
 				'type' => 'text',
-				'instructions' => '<em class="dev-only">Field Name: phone_number<br />Field Key: field_6216609c5be82</em>',
+				'instructions' => '<em class="dev-only">Field Name: phone_number<br />Field Key: field_6216609c5be82</em><p>shortcode: [phone-number text="<em>link text</em>]</p>',
 				'required' => 0,
 				'conditional_logic' => 0,
 				'wrapper' => array(
