@@ -4,7 +4,7 @@
  * Plugin Name: AIC Theme Options
  * Plugin URI: https://anioncreative.com
  * Description: Adds user options to AIC theme.
- * Version: 9.3
+ * Version: 10.0
  * Author: An Ion Creative
  * Author URI: https://anioncreative.com
  *
@@ -151,6 +151,28 @@
             add_action('get_header', 'aic_maintenance_mode');
         }
     }
+
+// Function to run when a site is suspended
+
+    function aic_suspension_mode(){
+        $ip = get_field('ip_address', 'option');
+        if($_SERVER['REMOTE_ADDR'] != $ip){
+        
+            if ( file_exists( plugin_dir_path( __FILE__ ) . 'views/suspended.php' ) ) {
+                require_once( plugin_dir_path( __FILE__ ) . 'views/suspended.php' );
+            }
+            die();
+        }
+    }
+
+    add_action( 'acf/init', 'aic_suspension_check' );
+    function aic_suspension_check(){
+        $status = get_field( 'suspend_site', 'option');
+
+        if( $status != FALSE ){
+            add_action('get_header', 'aic_suspension_mode');
+        }
+    }
     
 // Theme Colors
 
@@ -282,7 +304,7 @@ Background Color: has-'.$color_name.'-background-color';
         }
         $chosen_fields = get_field('other_options_visibility', 'option');
         $filters = '';
-        // echo '<pre>';print_r($chosen_fields);echo '</pre>';
+       
         if( $chosen_fields != '' ){
             foreach( $chosen_fields as $chosen_field ){
                 $filters .= add_filter('acf/load_field/key='.$chosen_field['field_key'].'', 'aic_hide');
@@ -359,19 +381,17 @@ Background Color: has-'.$color_name.'-background-color';
 
         $block_disable_list = get_field('disable_editor_list', 'options');
 
-        if( $block_disable_list == '' ){
+        if( !is_array($block_disable_list) ){
             return;
         }
 
-        $list = array();
+        $excluded_ids = array();
 
         foreach( $block_disable_list as $p_id ){
-            $list[] .= $p_id->ID;
+            $excluded_ids[] .= $p_id->ID;
         }
 
-        $excluded_ids = $list;
-
-        return $excluded_ids;
+        return in_array( $id, $excluded_ids );
     }
 
     function aic_disable_gutenberg( $can_edit, $post_type ) {
@@ -387,6 +407,43 @@ Background Color: has-'.$color_name.'-background-color';
     }
     add_filter( 'gutenberg_can_edit_post_type', 'aic_disable_gutenberg', 10, 2 );
     add_filter( 'use_block_editor_for_post_type', 'aic_disable_gutenberg', 10, 2 );
+    add_action( 'admin_head', 'aic_disable_editor' );
 
+// Shortcodes for company information
+
+	// Email
+
+	add_shortcode('email', 'email_func');
+	function email_func($attr){
+		if( isset($attr['text']) ){
+			$link_text = $attr['text'];
+		}else{
+			$link_text = 'Email';
+		}
+
+		$email = ( get_field('email', 'option') != '' )?'<a href="mailto:'.get_field('email', 'option').'">'.$link_text.'</a>':'';
+
+		return $email;
+	}
+
+	// Phone Number
+
+	add_shortcode('phone-number', 'phone_number_func');
+	function phone_number_func($attr){
+		$number = get_field('phone_number','option');
+		if( isset($attr['text']) ){
+			$link_text = $attr['text'];
+		}else{
+			$link_text = $number;
+		}
+
+		if( $number != '' ){
+			$number = '<a href="tel:'.preg_replace('/[^A-Za-z0-9]/', '', $number).'">'.$link_text.'</a>';
+		}else{
+			$number = '';
+		}
+
+		return $number;
+	}
 
 ?>
