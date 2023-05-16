@@ -304,7 +304,7 @@ Background Color: has-'.$color_name.'-background-color';
         }
         $chosen_fields = get_field('other_options_visibility', 'option');
         $filters = '';
-        // echo '<pre>';print_r($chosen_fields);echo '</pre>';
+       
         if( $chosen_fields != '' ){
             foreach( $chosen_fields as $chosen_field ){
                 $filters .= add_filter('acf/load_field/key='.$chosen_field['field_key'].'', 'aic_hide');
@@ -381,43 +381,31 @@ Background Color: has-'.$color_name.'-background-color';
 
         $block_disable_list = get_field('disable_editor_list', 'options');
 
-        if( $block_disable_list == '' ){
+        if( !is_array($block_disable_list) ){
             return;
         }
 
-        $list = array();
+        $excluded_ids = array();
 
         foreach( $block_disable_list as $p_id ){
-            $list[] .= $p_id->ID;
+            $excluded_ids[] .= $p_id->ID;
         }
 
-        $excluded_ids = $list;
-
-        return $excluded_ids;
+        return in_array( $id, $excluded_ids );
     }
 
-//     function aic_disable_gutenberg( $can_edit, $post_type ) {
+    function aic_disable_gutenberg( $can_edit, $post_type ) {
 
-//         if( ! ( is_admin() && !empty( $_GET['post'] ) ) )
-//             return $can_edit;
+        if( ! ( is_admin() && !empty( $_GET['post'] ) ) )
+            return $can_edit;
 
-//         if( aic_disable_editor( $_GET['post'] ) )
-//             $can_edit = false;
+        if( aic_disable_editor( $_GET['post'] ) )
+            $can_edit = false;
 
-//         return $can_edit;
+        return $can_edit;
 
     }
-//     add_filter( 'gutenberg_can_edit_post_type', 'aic_disable_gutenberg', 10, 2 );
-//     add_filter( 'use_block_editor_for_post_type', 'aic_disable_gutenberg', 10, 2 );
-
-    function aic_disable_gutenberg( $use_block_editor, $post ) {
-
-        $excluded_ids = get_field('disable_editor_list', 'option');
-        if ( in_array( $post->ID, $excluded_ids ) ) {
-            return false;
-        }
-        return $use_block_editor;
-    }
-    add_filter( 'use_block_editor_for_post', 'aic_disable_gutenberg', 10, 2 );
-
+    add_filter( 'gutenberg_can_edit_post_type', 'aic_disable_gutenberg', 10, 2 );
+    add_filter( 'use_block_editor_for_post_type', 'aic_disable_gutenberg', 10, 2 );
+    add_action( 'admin_head', 'aic_disable_editor' );
 ?>
