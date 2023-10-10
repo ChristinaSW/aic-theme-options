@@ -14,6 +14,9 @@ foreach( $get_colors as $color ){
     .has-<?php echo $color_name; ?>-background-color {
         background-color: <?php echo $color_hex; ?>;
     }
+    .has-inline-color.has-<?php echo $color_name; ?>-color {
+        color: <?php echo $color_hex; ?>;
+    }
 <?php
 
 }
