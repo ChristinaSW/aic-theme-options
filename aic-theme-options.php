@@ -4,7 +4,7 @@
  * Plugin Name: AIC Theme Options
  * Plugin URI: https://anioncreative.com
  * Description: Adds user options to AIC theme.
- * Version: 10.3
+ * Version: 10.4
  * Author: An Ion Creative
  * Author URI: https://anioncreative.com
  *
@@ -108,7 +108,6 @@
     add_action( 'admin_enqueue_scripts', 'aic_emm_admin_styles' );
     function aic_emm_admin_styles(){
         wp_enqueue_style( 'admin-styles', plugin_dir_url(__FILE__) . '/assets/aic-theme-options-admin-styles.css');
-	wp_enqueue_style('dynamic-aic-theme-option-styles', plugin_dir_url( __FILE__ ) . 'assets/dynamic-aic-theme-options.css' );
     }
 
 // Add front end styling
@@ -153,12 +152,31 @@
         }
     }
 
+// Function to run when coming soon is switched on
+
+    function aic_coming_soon(){
+        if(!current_user_can('administrator')){
+            if ( file_exists( plugin_dir_path( __FILE__ ) . 'views/coming-soon.php' ) ) {
+                require_once( plugin_dir_path( __FILE__ ) . 'views/coming-soon.php' );
+            }
+            die();
+        }
+    }
+
+    add_action( 'acf/init', 'aic_coming_soon_status_check' );
+    function aic_coming_soon_status_check(){
+        $status = get_field( 'enable_coming_soon', 'option');
+        if( $status != FALSE ){
+            add_action('get_header', 'aic_coming_soon');
+        }
+    }
+
+
 // Function to run when a site is suspended
 
     function aic_suspension_mode(){
         $ip = get_field('ip_address', 'option');
         if($_SERVER['REMOTE_ADDR'] != $ip){
-        
             if ( file_exists( plugin_dir_path( __FILE__ ) . 'views/suspended.php' ) ) {
                 require_once( plugin_dir_path( __FILE__ ) . 'views/suspended.php' );
             }
@@ -166,14 +184,25 @@
         }
     }
 
+    // Prevent non-admin to access wp-admin
+
+    function aic_admin_access(){
+        $ip = get_field('ip_address', 'option');
+        if( $_SERVER['REMOTE_ADDR'] != $ip && $GLOBALS['pagenow'] == 'wp-login.php' ){
+            exit( wp_redirect( site_url() ) );
+        }
+    }
+
     add_action( 'acf/init', 'aic_suspension_check' );
     function aic_suspension_check(){
         $status = get_field( 'suspend_site', 'option');
-
         if( $status != FALSE ){
             add_action('get_header', 'aic_suspension_mode');
+            add_action( 'init', 'aic_admin_access', 100 );
         }
     }
+
+
     
 // Theme Colors
 
