@@ -4,7 +4,7 @@
  * Plugin Name: AIC Theme Options
  * Plugin URI: https://anioncreative.com
  * Description: Adds user options to AIC theme.
- * Version: 10.4
+ * Version: 11
  * Author: An Ion Creative
  * Author URI: https://anioncreative.com
  *
@@ -97,10 +97,21 @@
                 'width'           => true,
                 'frameborder'     => true,
                 'allowfullscreen' => true,
+                'display'         => true,
+                'style'           => true
             );
         }
 
         return $tags;
+    }
+
+// Allow display style to work
+
+    add_filter( 'safe_style_css', 'add_display_to_safe_css', 10, 1 );
+    function add_display_to_safe_css( $css_attributes ) {
+        $css_attributes[] = 'display';
+
+        return $css_attributes;
     }
     
 // Add admin styling
@@ -469,5 +480,56 @@ Background Color: has-'.$color_name.'-background-color';
 
 		return $number;
 	}
+
+// Add Tutorials
+
+    add_filter('acf/prepare_field/key=field_668c177490a06', 'tutorial_list');
+    function tutorial_list($field){
+        $get_tutorial_list = get_field('tutorial_section', 'option');
+        $tutorial_videos = '<div class="col">';
+        $c = 0;
+        if( $get_tutorial_list != '' ){
+            $videos = $get_tutorial_list['tutorial_videos'];
+            $column_break = $get_tutorial_list['column_break'];
+            foreach( $videos as $video ){
+                $title = $video['title'];
+                $link = $video['video_file'];
+
+                $tutorial_videos .= '
+                    <a target="_blank" href="'.$link.'">'.ucwords($title).'</a>
+                    <br />
+                    <div class="spacer" style="height: 5px;"></div>
+                ';
+                $c++;
+                
+                if( $column_break != '' && $c == $column_break ){
+                    $tutorial_videos .= '</div><div class="col">';
+                    $c++;
+                }
+            }
+        }else{
+            $tutorial_videos .= '<p>No tutorials available at this time.</p>';
+        }
+
+        $tutorial_videos .= '</div>';
+
+        $wrap_style = '
+            display: flex;
+            width: fit-content;
+            gap: 20px;
+        ';
+
+        $tutorial_list = '
+            <div class="tutorial-list">
+                <div class="video-list-wrap" style="'.$wrap_style.'">
+                    '.$tutorial_videos.'
+                </div>
+            </div>
+        ';
+
+        $field['message'] = $tutorial_list;
+
+        return $field;
+    }
 
 ?>
