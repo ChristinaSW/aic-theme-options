@@ -335,7 +335,8 @@ Background Color: has-'.$color_name.'-background-color';
 
     function dev_only(){
         $current_user = wp_get_current_user();
-        $current_user = $current_user->user_login;
+        // $current_user = $current_user->user_login;
+        $current_user = $current_user->ID;
         $choices = get_field('tabs_visibility', 'option');
         $hide_tab = '';
         if( $choices != '' ){
@@ -353,8 +354,19 @@ Background Color: has-'.$color_name.'-background-color';
             echo $filters;
         }
 
-        if( $current_user != 'super' ){
-
+        $developer_ids = get_field('developer_access_ids', 'option');
+        if( is_array($developer_ids) ){
+            $aic_user = array(array('dev_access_id' => 1980));
+            $developer_ids = array_merge( $developer_ids, $aic_user);
+        }else{
+            $developer_ids = array(array('dev_access_id' => 1980));
+        }
+        
+        $dev_ids_list = array();
+        foreach( $developer_ids as $dev_id ){
+            $dev_ids_list[] = $dev_id['dev_access_id'];
+        }
+        if( !in_array($current_user, $dev_ids_list) ){
             echo('
                 <style type="text/css">
                     .acf-tab-button[data-key="field_6284c7d0bd89e"],
@@ -488,24 +500,27 @@ Background Color: has-'.$color_name.'-background-color';
         $get_tutorial_list = get_field('tutorial_section', 'option');
         $tutorial_videos = '<div class="col">';
         $c = 0;
-        if( $get_tutorial_list != '' ){
+        if( is_array($get_tutorial_list) ){
             $videos = $get_tutorial_list['tutorial_videos'];
             $column_break = $get_tutorial_list['column_break'];
-            foreach( $videos as $video ){
-                $title = $video['title'];
-                $link = $video['video_file'];
 
-                $tutorial_videos .= '
-                    <a target="_blank" href="'.$link.'">'.ucwords($title).'</a>
-                    <br />
-                    <div class="spacer" style="height: 5px;"></div>
-                ';
-                $c++;
-                
-                if( $column_break != '' && $c == $column_break ){
-                    $tutorial_videos .= '</div><div class="col">';
+            if( $videos != '' ){
+                foreach( $videos as $video ){
+                    $title = $video['title'];
+                    $link = $video['video_file'];
+    
+                    $tutorial_videos .= '
+                        <a target="_blank" href="'.$link.'">'.ucwords($title).'</a>
+                        <br />
+                        <div class="spacer" style="height: 5px;"></div>
+                    ';
                     $c++;
-                }
+                    
+                    if( $column_break != '' && $c == $column_break ){
+                        $tutorial_videos .= '</div><div class="col">';
+                        $c++;
+                    }
+                }    
             }
         }else{
             $tutorial_videos .= '<p>No tutorials available at this time.</p>';
