@@ -23,7 +23,7 @@ class Smashing_Updater {
 		$this->file = $file;
 
 		add_action( 'admin_init', array( $this, 'set_plugin_properties' ) );
-
+		
 		return $this;
 	}
 
@@ -73,25 +73,27 @@ class Smashing_Updater {
 	}
 
 	public function modify_transient( $transient ) {
-		if( $checked = $transient->checked ) { // Did Wordpress check for updates?
+		if( property_exists( $transient, 'checked') ) {
+			if( $checked = $transient->checked ) { // Did Wordpress check for updates?
 
-			$this->get_repository_info(); // Get the repo info
-
-			$out_of_date = version_compare( $this->github_response['tag_name'], $checked[ $this->basename ] ); // Check if we're out of date
-
-			if( $out_of_date ) {
-
-				$new_files = $this->github_response['zipball_url']; // Get the ZIP
-
-				$plugin = array( // setup our plugin info
-					'url' => $this->plugin["PluginURI"],
-					'slug' => $this->basename,
-					'package' => $new_files,
-					'new_version' => $this->github_response['tag_name']
-				);
-
-				$transient->response[$this->basename] = (object) $plugin; // Return it in response
-			}
+				$this->get_repository_info(); // Get the repo info
+	
+				$out_of_date = version_compare( $this->github_response['tag_name'], $checked[ $this->basename ] ); // Check if we're out of date
+	
+				if( $out_of_date ) {
+	
+					$new_files = $this->github_response['zipball_url']; // Get the ZIP
+	
+					$plugin = array( // setup our plugin info
+						'url' => $this->plugin["PluginURI"],
+						'slug' => $this->basename,
+						'package' => $new_files,
+						'new_version' => $this->github_response['tag_name']
+					);
+	
+					$transient->response[$this->basename] = (object) $plugin; // Return it in response
+				}
+			}	
 		}
 
 		return $transient; // Return filtered transient
@@ -143,3 +145,5 @@ class Smashing_Updater {
 		return $result;
 	}
 }
+
+?>
