@@ -1,26 +1,9 @@
 /* Expand / Collapse Buttons */
 
-.field-repeater-toggle-all,
-.field-flexible-toggle {
-	float:right;
-	margin: -5px 0 0 !important;
-}
-.field-repeater-toggle::before,
-.field-flexible-toggle::before {
-	content: "\f506";
-	display: inline;
-	-webkit-font-smoothing: antialiased;
-	font: normal 20px/1 'dashicons';
-	vertical-align: text-bottom;
-	color: #777;
-	margin: 3px 5px 0 0; 
-}
-.field-repeater-toggle-all.collapsed-row::before,
-.field-flexible-toggle-all.collapsed-row::before {
-	content: "\f211";
-}
-.acf-field-repeater .acf-input {
-    margin-top: 30px; 
+.repeater-label {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
 }
 
 /* Company Information Tab */
