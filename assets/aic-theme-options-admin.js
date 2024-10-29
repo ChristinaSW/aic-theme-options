@@ -9,6 +9,7 @@ $j(function (){
 
 function repeaterCollapseButton(){
     $j('.acf-field-repeater').each(function(){
+        var fieldKey = $j(this).attr('data-key');
         $j(this).find('.acf-label:first').each(function(){
             var html = `
                 <div class="button-wrap">
@@ -16,6 +17,12 @@ function repeaterCollapseButton(){
                 </div>
             `;
             $j(this).addClass('repeater-label');
+            if( $j(this).find('label').length === 0 ){
+                var label = `
+                    <label for="`+fieldKey+`"></label>
+                `;
+                $j(this).append(label);
+            }
             $j(this).append(html);
         });
     });
