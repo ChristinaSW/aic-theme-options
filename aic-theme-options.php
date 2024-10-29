@@ -4,7 +4,7 @@
  * Plugin Name: AIC Theme Options
  * Plugin URI: https://anioncreative.com
  * Description: Adds user options to AIC theme.
- * Version: 11.2
+ * Version: 11.3
  * Author: An Ion Creative
  * Author URI: https://anioncreative.com
  *
@@ -114,11 +114,13 @@
         return $css_attributes;
     }
     
-// Add admin styling
+// Add admin styling & javascript
 
     add_action( 'admin_enqueue_scripts', 'aic_emm_admin_styles' );
     function aic_emm_admin_styles(){
-        wp_enqueue_style( 'admin-styles', plugin_dir_url(__FILE__) . '/assets/aic-theme-options-admin-styles.css');
+        wp_register_script('aic-theme-options-admin',  plugin_dir_url(__FILE__) . 'assets/aic-theme-options-admin.js', array('jquery'),'1.0', true);
+        wp_enqueue_script('aic-theme-options-admin');
+        wp_enqueue_style( 'admin-styles', plugin_dir_url(__FILE__) . 'assets/aic-theme-options-admin-styles.css');
     }
 
 // Add front end styling
@@ -503,16 +505,28 @@ Background Color: has-'.$color_name.'-background-color';
         if( is_array($get_tutorial_list) ){
             $videos = $get_tutorial_list['tutorial_videos'];
             $column_break = $get_tutorial_list['column_break'];
+            $border_color = $get_tutorial_list['border_color'];
 
             if( $videos != '' ){
                 foreach( $videos as $video ){
                     $title = $video['title'];
                     $link = $video['video_file'];
+                    $thumb = $video['thumbnail'];
+                    if( $thumb != '' ){
+                        $tutorial_layout = '
+                            <img style="border-color: '.$border_color.';" src="'.$thumb.'" />
+                            <p>'.$title.'</p>
+                        ';
+                    }else{
+                        $tutorial_layout = ucwords($title);
+                    }
     
                     $tutorial_videos .= '
-                        <a target="_blank" href="'.$link.'">'.ucwords($title).'</a>
-                        <br />
-                        <div class="spacer" style="height: 5px;"></div>
+                        <div class="tutorial">
+                            <a target="_blank" href="'.$link.'">'.$tutorial_layout.'</a>
+                            <br />
+                            <div class="spacer" style="height: 5px;"></div>
+                        </div>
                     ';
                     $c++;
                     
