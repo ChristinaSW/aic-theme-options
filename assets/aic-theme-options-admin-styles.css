@@ -13,7 +13,7 @@
 	font: normal 20px/1 'dashicons';
 	vertical-align: text-bottom;
 	color: #777;
-	margin: 3px 5px 0 0;
+	margin: 3px 5px 0 0; 
 }
 .field-repeater-toggle-all.collapsed-row::before,
 .field-flexible-toggle-all.collapsed-row::before {
@@ -52,3 +52,24 @@
         border: none;
         padding: 0;
     }
+
+/* Tutorials styling */
+
+.video-list-wrap .col {
+    display: flex;
+    flex-direction: column;
+}
+.tutorial a {
+    text-decoration: none;
+    color: #000;
+}
+.tutorial a img {
+    border: 2px solid;
+    max-width: 200px;
+    width: 100%;
+}
+.tutorial a p {
+    font-style: italic;
+    text-align: center;
+    margin: 0;
+}
