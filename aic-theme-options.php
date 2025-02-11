@@ -4,12 +4,64 @@
  * Plugin Name: AIC Theme Options
  * Plugin URI: https://anioncreative.com
  * Description: Adds user options to AIC theme.
- * Version: 11.3
+ * Version: 11.4
  * Author: An Ion Creative
  * Author URI: https://anioncreative.com
  *
  * @package aic-theme-options
 */
+
+// If ACF is deactivated
+
+    function aic_plugin_acf_deactivated( $plugin ) {
+        // Check if ACF was deactivated
+        if( plugin_basename( __FILE__ ) !== $plugin && 'advanced-custom-fields/acf.php' === $plugin ){
+            // Deactivate this plugin
+            deactivate_plugins(plugin_basename( __FILE__ ));
+
+            // Display an admin notice (This is not working. Activation error message keeps showing)
+            add_action('admin_notices', function(){
+                echo '<div class="notice notice-error is-dismissible">
+                        <p><strong>AIC Theme Options Error:</strong> This plugin requires <strong>Advanced Custom Fields Pro</strong> to be active. Please activate ACF Pro to restore plugin functionality.</p>
+                    </div>';
+            });
+        }
+    }
+    add_action( 'deactivated_plugin', 'aic_plugin_acf_deactivated' );
+
+// Dependency Check
+
+    if( !class_exists('ACF') ){
+
+        // Remove the "Plugin activated" message by unsetting the GET parameter.
+        if( is_admin() && isset($_GET['activate']) ){
+            unset( $_GET['activate'] );
+        }
+
+        // Hook an admin notice to tell the user that ACF is required.
+        add_action('admin_notices', function(){
+            echo '<div class="notice notice-error is-dismissible">
+                    <p><strong>AIC Theme Options Error:</strong> This plugin requires <strong>Advanced Custom Fields Pro</strong> to be installed and active. Please install/activate ACF Pro and try again.</p>
+                </div>';
+        });
+
+        // If we are in the admin area (and not doing an AJAX request), deactivate the plugin.
+        if( is_admin() && (!defined( 'DOING_AJAX' ) || !DOING_AJAX) ){
+            deactivate_plugins( plugin_basename( __FILE__ ) );
+        }
+
+        // Stop further execution of this file.
+        return;
+    }else{
+       global $pagenow;
+
+       if( in_array('advanced-custom-fields-pro/acf.php', apply_filters('active_plugins', get_option('active_plugins'))) ){
+           define('MY_ACF_PATH', plugin_dir_path(__DIR__) . 'advanced_custom_fields-pro/');
+           define( 'MY_ACF_URL', plugin_dir_path(__DIR__) . 'advanced-custom-fields-pro/' );
+           include_once( MY_ACF_PATH . 'acf.php' );
+       }
+    }
+
 
 // Add updater so we can update plugin from github
 
@@ -21,26 +73,6 @@
     $updater->set_username( 'ChristinaSW' );
     $updater->set_repository( 'aic-theme-options' );
     $updater->initialize();
-
-// Check if ACF plugin is installed and add a notice if it is not
-
-    function general_admin_notice(){
-        global $pagenow;
-        if ( in_array( 'advanced-custom-fields-pro/acf.php', apply_filters( 'active_plugins', get_option( 'active_plugins' ) ) ) ) {
-            // Define path and URL to the ACF plugin.
-                define( 'MY_ACF_PATH', plugin_dir_path(__DIR__) . 'advanced-custom-fields-pro/' );
-                define( 'MY_ACF_URL', plugin_dir_path(__DIR__) . 'advanced-custom-fields-pro/' );
-            // Include the ACF plugin.
-                include_once( MY_ACF_PATH . 'acf.php' );
-        }else{
-            echo '
-                <div class="notice notice-error is-dismissible">
-                    <p>AIC Theme Options will not work without Advanced Custom Fields Pro. Please install and/or activate the ACF Pro plugin A.S.A.P.</p>
-                </div>
-            ';
-        }
-    }
-    add_action('admin_notices', 'general_admin_notice');
 
 // Add our custom fields
     include_once( plugin_dir_path(__FILE__) . 'lib/aic-custom-fields.php' );
