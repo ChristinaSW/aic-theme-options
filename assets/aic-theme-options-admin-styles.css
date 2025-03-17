@@ -56,3 +56,17 @@
     text-align: center;
     margin: 0;
 }
+
+/* Support Ticket */
+
+.toplevel_page_send-a-ticket .acf-settings-wrap #post-body.columns-2 #postbox-container-1,
+.toplevel_page_send-a-ticket #postbox-container-2 .postbox-header {
+    display: none;
+}
+.toplevel_page_send-a-ticket #poststuff #post-body.columns-2 {
+    margin-right: 0;
+}
+.toplevel_page_send-a-ticket #acf-group_67d8386cb03f5.postbox {
+    border: none;
+    background: transparent;
+}
