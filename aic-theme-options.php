@@ -86,43 +86,43 @@
 
             // Add parent
             $parent = acf_add_options_page(array(
-                'page_title' 	=> 'Options',
-				'menu_title'	=> 'Options',
-				'menu_slug' 	=> 'aic-options',
-				'position' 		=> '6',
-                'autoload'      => TRUE,
-                'redirect'      => TRUE,
-                'capability'    => 'edit_theme_options',
-                'icon_url'      => 'dashicons-art',
-				'update_button' => __('Save Settings', 'acf'),
-				'updated_message' => __("Settings Saved", 'acf')
+                'page_title' 	    => 'Options',
+				'menu_title'	    => 'Options',
+				'menu_slug' 	    => 'aic-options',
+				'position' 		    => '6',
+                'autoload'          => TRUE,
+                'redirect'          => TRUE,
+                'capability'        => 'edit_theme_options',
+                'icon_url'          => 'dashicons-art',
+				'update_button'     => __('Save Settings', 'acf'),
+				'updated_message'   => __("Settings Saved", 'acf')
             ));
 
             // Add sub pages
             $child = acf_add_options_page(array(
-                'page_title'  => __('Send A Support Ticket'),
-                'menu_title'  => __('Support'),
-                'menu_slug' 	=> 'send-a-ticket',
-                'parent_slug' => $parent['menu_slug'],
-                'update_button' => __('Save Settings', 'acf'),
-                'updated_message' => __("Settings Saved", 'acf')
+                'page_title'        => __('Send A Support Ticket'),
+                'menu_title'        => __('Support'),
+                'menu_slug' 	    => 'send-a-ticket',
+                'position'          => '4',
+                'update_button'     => __('Save Settings', 'acf'),
+                'updated_message'   => __("Settings Saved", 'acf')
             ));
 
             $child = acf_add_options_page(array(
-                'page_title'  => __('Theme Options'),
-                'menu_title'  => __('Theme Options'),
-                'menu_slug' 	=> 'aic-theme-options',
-                'parent_slug' => $parent['menu_slug'],
-                'update_button' => __('Save Settings', 'acf'),
-                'updated_message' => __("Settings Saved", 'acf')
+                'page_title'        => __('Theme Options'),
+                'menu_title'        => __('Theme Options'),
+                'menu_slug' 	    => 'aic-theme-options',
+                'parent_slug'       => $parent['menu_slug'],
+                'update_button'     => __('Save Settings', 'acf'),
+                'updated_message'   => __("Settings Saved", 'acf')
             ));
 
             $child = acf_add_options_page(array(
-                'page_title'  => __('Site Options'),
-                'menu_title'  => __('Site Options'),
-                'parent_slug' => $parent['menu_slug'],
-                'update_button' => __('Save Settings', 'acf'),
-                'updated_message' => __("Settings Saved", 'acf')
+                'page_title'        => __('Site Options'),
+                'menu_title'        => __('Site Options'),
+                'parent_slug'       => $parent['menu_slug'],
+                'update_button'     => __('Save Settings', 'acf'),
+                'updated_message'   => __("Settings Saved", 'acf')
             ));
         }
     }
