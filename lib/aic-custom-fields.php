@@ -2,11 +2,58 @@
 
 add_action( 'acf/init', 'aic_fields' );
 function aic_fields(){
-	$group_key = 'group_61a631ba28adb';
+	$theme_op_group_key = 'group_61a631ba28adb';
+	$support_op_group_key = 'group_67d8386cb03f5';
 	$location = 'aic-theme-options';
+	$site_url = '?Website='.site_url().'';
+	$user = wp_get_current_user();
+	$name = '&Name='.$user->user_firstname.' '.$user->user_lastname.'';
+	$email = '&Email='.$user->user_email.'';
+	
+	acf_add_local_field_group(array(
+		'key' => $support_op_group_key,
+		'title' => 'Send A Ticket',
+		'fields' => array(
+			array(
+				'key' => 'field_67d8386c77793',
+				'label' => '',
+				'name' => 'support-form',
+				'type' => 'message',
+				'instructions' => '',
+				'required' => 0,
+				'conditional_logic' => 0,
+				'wrapper' => array(
+					'width' => '',
+					'class' => '',
+					'id' => '',
+				),
+				'message' => '<iframe class="clickup-embed clickup-dynamic-height" src="https://forms.clickup.com/1274607/f/16wqf-40/B5U3MXUHVQ8Q9HZRNU'.$site_url.$name.$email.$browser.'" onwheel="" width="100%" height="1325" style="background: transparent; border: 1px solid #ccc;"></iframe><script async src="https://app-cdn.clickup.com/assets/js/forms-embed/v1.js"></script>',
+				'new_lines' => '',
+				'esc_html' => 0,
+			),
+		),
+		'location' => array(
+			array(
+				array(
+					'param' => 'options_page',
+					'operator' => '==',
+					'value' => 'send-a-ticket'
+				)
+			),
+		),
+		'menu_order' => 0,
+		'position' => 'normal',
+		'style' => 'default',
+		'label_placement' => 'top',
+		'instruction_placement' => 'field',
+		'hide_on_screen' => '',
+		'active' => true,
+		'description' => '',
+		'show_in_rest' => 0,
+	));
 
 	acf_add_local_field_group(array(
-		'key' => $group_key,
+		'key' => $theme_op_group_key,
 		'title' => 'Theme Options',
 		'fields' => array(
 			array(
@@ -681,40 +728,6 @@ function aic_fields(){
 					'id' => '',
 				),
 				'message' => '',
-				'new_lines' => '',
-				'esc_html' => 0,
-			),
-
-			array(
-				'key' => 'field_61a635871d943',
-				'label' => 'Send A Support Ticket',
-				'name' => '',
-				'type' => 'tab',
-				'instructions' => '',
-				'required' => 0,
-				'conditional_logic' => 0,
-				'wrapper' => array(
-					'width' => '',
-					'class' => '',
-					'id' => '',
-				),
-				'placement' => 'top',
-				'endpoint' => 0,
-			),
-			array(
-				'key' => 'field_61e05723b7bbd',
-				'label' => '',
-				'name' => 'support-form',
-				'type' => 'message',
-				'instructions' => '',
-				'required' => 0,
-				'conditional_logic' => 0,
-				'wrapper' => array(
-					'width' => '',
-					'class' => '',
-					'id' => '',
-				),
-				'message' => '<iframe class="clickup-embed clickup-dynamic-height" src="https://forms.clickup.com/1274607/f/16wqf-40/B5U3MXUHVQ8Q9HZRNU" onwheel="" width="100%" height="1325" style="background: transparent; border: 1px solid #ccc;"></iframe><script async src="https://app-cdn.clickup.com/assets/js/forms-embed/v1.js"></script>',
 				'new_lines' => '',
 				'esc_html' => 0,
 			),
