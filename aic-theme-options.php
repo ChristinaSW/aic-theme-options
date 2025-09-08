@@ -4,7 +4,7 @@
  * Plugin Name: AIC Theme Options
  * Plugin URI: https://anioncreative.com
  * Description: Adds user options to AIC theme.
- * Version: 12
+ * Version: 12.1
  * Author: An Ion Creative
  * Author URI: https://anioncreative.com
  *
@@ -56,7 +56,7 @@
        global $pagenow;
 
        if( in_array('advanced-custom-fields-pro/acf.php', apply_filters('active_plugins', get_option('active_plugins'))) ){
-           define('MY_ACF_PATH', plugin_dir_path(__DIR__) . 'advanced_custom_fields-pro/');
+           define('MY_ACF_PATH', plugin_dir_path(__DIR__) . 'advanced-custom-fields-pro/');
            define( 'MY_ACF_URL', plugin_dir_path(__DIR__) . 'advanced-custom-fields-pro/' );
            include_once( MY_ACF_PATH . 'acf.php' );
        }
@@ -376,10 +376,11 @@ Background Color: has-'.$color_name.'-background-color';
 
 // Hide if not AIC developer
 
+    add_action('admin_head','dev_only');
     function dev_only(){
-        $current_user = wp_get_current_user();
-        // $current_user = $current_user->user_login;
-        $current_user = $current_user->ID;
+        $current_user = get_current_user_id();
+        // $current_user = wp_get_current_user();
+        // $current_user = $current_user->ID;
         $choices = get_field('tabs_visibility', 'option');
         $hide_tab = '';
         if( $choices != '' ){
@@ -396,24 +397,13 @@ Background Color: has-'.$color_name.'-background-color';
             }
             echo $filters;
         }
-
-        $developer_ids = get_field('developer_access_ids', 'option');
-        if( is_array($developer_ids) ){
-            $aic_user = array(array('dev_access_id' => 1980));
-            $developer_ids = array_merge( $developer_ids, $aic_user);
-        }else{
-            $developer_ids = array(array('dev_access_id' => 1980));
-        }
-        
-        $dev_ids_list = array();
-        foreach( $developer_ids as $dev_id ){
-            $dev_ids_list[] = $dev_id['dev_access_id'];
-        }
-        if( !in_array($current_user, $dev_ids_list) ){
+    
+        if( !in_array($current_user, developer_ids()) ){
             echo('
                 <style type="text/css">
                     .acf-tab-button[data-key="field_6284c7d0bd89e"],
                     .acf-tab-button[data-key="field_62dff6febee11"],
+                    .acf-tab-button[data-key="field_61a632871d943"],
                     '.$hide_tab.'
                     .acf-field.dev-only,
                     .dev-only {
@@ -423,7 +413,6 @@ Background Color: has-'.$color_name.'-background-color';
             ');
         }
     }
-    add_action('admin_head','dev_only');
 
 // Function adding the dev-only class
 
@@ -602,4 +591,70 @@ Background Color: has-'.$color_name.'-background-color';
         return $field;
     }
 
+// Remove uneeded menu items and hide menus from non-developer admins
+
+    add_action( 'admin_menu', 'hide_menu_pages', 999 );
+    function hide_menu_pages(){
+        $current_user = get_current_user_id();
+        if( !in_array($current_user, developer_ids()) ){
+            $hidden_pages = get_field('admin_menus', 'option');
+            $hidden_sub_pages = get_field('admin_sub_menus', 'option');
+            $other_pages = get_field('other_menus', 'option');
+            if( is_array($other_pages) && !empty($other_pages) ){
+                foreach( $other_pages as $other_page ){
+                    if( $other_page['menu_type'] != 'page' ){
+                        $hidden_sub_pages[] = array(
+                            'value' => $other_page['parent_page_file_name'].'-'.$other_page['subpage_file'],
+                            'label' => $other_page['page_name']
+                        );
+                    }else{
+                        $hidden_pages[] = array(
+                            'value' => $other_page['page_file_name'],
+                            'label' => $other_page['page_name']
+                        );
+                    }
+                    
+                }
+            }
+
+            if( is_array($hidden_pages) && !empty($hidden_pages) ){
+                foreach( $hidden_pages as $hidden_page ){
+                    remove_menu_page($hidden_page['value']);
+                }
+            }
+
+            if( is_array($hidden_sub_pages) && !empty($hidden_sub_pages) ){
+                foreach( $hidden_sub_pages as $hidden_sub_page ){
+                    $parts = explode('-', $hidden_sub_page['value'], 2);
+                    $page_info['page-php'] = $parts[0];
+                    $page_info['subpage-php'] = $parts[1];
+                    if( $hidden_sub_page['label'] == 'Customize' ){
+                        $customizer_url = add_query_arg( 'return', urlencode( remove_query_arg( wp_removable_query_args(), wp_unslash( $_SERVER['REQUEST_URI'] ) ) ), 'customize.php' );
+                        $page_info['subpage-php'] = $customizer_url;
+                    }
+
+                    remove_submenu_page($page_info['page-php'], $page_info['subpage-php']);
+                }
+            }
+        }
+    }
+
+// Developer IDs
+
+    function developer_ids(){
+        $developer_ids = get_field('developer_access_ids', 'option');
+        if( is_array($developer_ids) ){
+            $aic_user = array(array('dev_access_id' => 1980));
+            $developer_ids = array_merge( $developer_ids, $aic_user);
+        }else{
+            $developer_ids = array(array('dev_access_id' => 1980));
+        }
+
+        $dev_ids_list = array();
+        foreach( $developer_ids as $dev_id ){
+            $dev_ids_list[] = $dev_id['dev_access_id'];
+        }
+
+        return $dev_ids_list;
+    }
 ?>
